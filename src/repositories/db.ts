@@ -1,4 +1,4 @@
-import {MongoClient, ObjectId} from 'mongodb'
+import {ObjectId} from 'mongodb'
 import mongoose from 'mongoose'
 import {
     BlogType,
@@ -12,13 +12,13 @@ import {
     RecoveryCodeType
 } from '../types/types'
 
-const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
+//const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
 const mongoForMongooseUri = process.env.mongoForMongooseURI || "mongodb://0.0.0.0:27017/testDB"
 
-export const client = new MongoClient(mongoUri)
+//export const client = new MongoClient(mongoUri)
 
-let dbName = "testDB"
-let db = client.db(dbName)
+//let dbName = "testDB"
+//let db = client.db(dbName)
 
 //export const RecoveryCodeModelClass = db.collection<RecoveryCodeType>('recoveryCodes')
 
@@ -108,7 +108,7 @@ export const RecoveryCodeModelClass = mongoose.model('recoveryCodes', RecoveryCo
 export async function runDb() {
     try {
         // Connect the client to the server
-        await client.connect()
+        //await client.connect()
         await mongoose.connect(mongoForMongooseUri)
 
         console.log("Connected successfully to mongo server")
@@ -116,7 +116,7 @@ export async function runDb() {
     } catch {
         console.log("Can't connect to db")
         // Ensures that the client will close when you finish/error
-        await client.close()
+        //await client.close()
         await mongoose.disconnect()
     }
 }
