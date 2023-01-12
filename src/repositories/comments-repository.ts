@@ -55,7 +55,7 @@ class CommentsRepository {
 
         return CommentModelClass.
         findOne({id}).
-        select('-_id -postId').
+        select('-__v -_id -postId').
         lean()
     }
     async updateComment(id: string, content: string): Promise<boolean> {
