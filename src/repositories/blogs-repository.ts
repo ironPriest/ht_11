@@ -1,13 +1,13 @@
 import {BlogType} from "../types/types";
 import {BlogModelClass} from "./db";
 
-export const blogsRepository = {
+class BlogsRepository {
     async getBlogs(
-            searchTerm: string | undefined,
-            pageNumber: number,
-            pageSize: number,
-            sortBy: string,
-            sortDirection: string) {
+        searchTerm: string | undefined,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
         const filter: any = {}
         if (searchTerm) {
             filter.name = {$regex: searchTerm, $options: 'i'}
@@ -26,11 +26,11 @@ export const blogsRepository = {
         }
 
         let query = BlogModelClass.
-            find().
-            select('-_id').
-            sort(sortFilter).
-            skip((pageNumber - 1) * pageSize).
-            limit(pageSize)
+        find().
+        select('-_id').
+        sort(sortFilter).
+        skip((pageNumber - 1) * pageSize).
+        limit(pageSize)
 
         if (searchTerm) {
             //todo case insensitive
@@ -44,10 +44,10 @@ export const blogsRepository = {
             "totalCount": totalCount,
             "items": await query
         }
-    },
+    }
     async getBlogById(blogId: string): Promise<BlogType | null> {
         return BlogModelClass.findOne({id: blogId}).lean()
-    },
+    }
     async createBlog(newBlog: BlogType): Promise<BlogType> {
 
         const newBlogInstance = new BlogModelClass()
@@ -61,7 +61,7 @@ export const blogsRepository = {
         await newBlogInstance.save()
         //await BlogModelClass.create(newBlog)
         return newBlog
-    },
+    }
     async updateBlog(blogId: string, name: string, websiteUrl: string): Promise<boolean> {
 
         const blogInstance = await  BlogModelClass.findOne({id: blogId})
@@ -74,7 +74,7 @@ export const blogsRepository = {
 
         // let result = await BlogModelClass.updateOne({id: blogId}, {$set: {name, websiteUrl}})
         return  true
-    },
+    }
     async deleteBlog(blogId: string): Promise<boolean> {
 
         const blogInstance = await  BlogModelClass.findOne({id: blogId})
@@ -84,8 +84,10 @@ export const blogsRepository = {
 
         //let result = await BlogModelClass.deleteOne({id: blogId})
         return true
-    },
+    }
     async deleteAll() {
         await BlogModelClass.deleteMany()
     }
 }
+
+export const blogsRepository = new BlogsRepository()

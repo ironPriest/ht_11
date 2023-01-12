@@ -1,12 +1,23 @@
 import {ObjectId, WithId} from 'mongodb'
 
-export type BlogType = WithId<{
-    id: string
-    name: string
-    websiteUrl: string
-    description: string
-    createdAt: Date
-}>
+export class BlogType {
+    constructor(
+        public _id: ObjectId,
+        public id: string,
+        public name: string,
+        public websiteUrl: string,
+        public description: string,
+        public createdAt: Date
+    ) {
+    }
+}
+// export type BlogType = WithId<{
+//     id: string
+//     name: string
+//     websiteUrl: string
+//     description: string
+//     createdAt: Date
+// }>
 export type PostType = WithId<{
     id: string
     title: string
