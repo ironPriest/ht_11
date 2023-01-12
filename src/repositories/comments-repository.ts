@@ -1,8 +1,8 @@
 import {CommentType} from "../types/types";
 import {CommentModelClass} from "./db";
 
-export const commentsRepository = {
-    async create(newComment: CommentType): Promise<CommentType> {
+class CommentsRepository {
+    async create(newComment: CommentType): Promise<boolean> {
 
         const newCommentInstance = new CommentModelClass()
         newCommentInstance.id = newComment.id
@@ -11,17 +11,20 @@ export const commentsRepository = {
         newCommentInstance.userLogin = newComment.userLogin
         newCommentInstance.createdAt = newComment.createdAt
         newCommentInstance.postId = newComment.postId
+        newCommentInstance.likesInfo.likesCount = newComment.likesInfo.likesCount
+        newCommentInstance.likesInfo.dislikesCount = newComment.likesInfo.dislikesCount
+        newCommentInstance.likesInfo.myStatus = newComment.likesInfo.myStatus
 
         await newCommentInstance.save()
 
-        return newComment
-    },
+        return true
+    }
     async findPostComments(
-            postId: string,
-            pageNumber: number,
-            pageSize: number,
-            sortBy: string,
-            sortDirection: string) {
+        postId: string,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
         let totalCount = await CommentModelClass.count({postId})
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
@@ -33,12 +36,12 @@ export const commentsRepository = {
         }
 
         let query = CommentModelClass.
-            find().
-            where('postId').equals(postId).
-            select('-_id -postId').
-            sort(sortFilter).
-            skip((pageNumber - 1) * pageSize).
-            limit(pageSize)
+        find().
+        where('postId').equals(postId).
+        select('-_id -postId').
+        sort(sortFilter).
+        skip((pageNumber - 1) * pageSize).
+        limit(pageSize)
 
         return {
             "pagesCount": pageCount,
@@ -47,13 +50,13 @@ export const commentsRepository = {
             "totalCount": totalCount,
             "items": await query
         }
-    },
+    }
     async findCommentById(id: string): Promise<Omit<CommentType, '_id, postId'> | null> {
 
         return CommentModelClass.
-            findOne({id}).
-            select('-_id -postId')
-    },
+        findOne({id}).
+        select('-_id -postId')
+    }
     async updateComment(id: string, content: string): Promise<boolean> {
 
         const commentInstance = await CommentModelClass.findOne({id})
@@ -64,7 +67,7 @@ export const commentsRepository = {
         await commentInstance.save()
 
         return true
-    },
+    }
     async delete(id: string) {
 
         const commentInstance = await CommentModelClass.findOne({id})
@@ -73,8 +76,10 @@ export const commentsRepository = {
         await commentInstance.deleteOne()
 
         return true
-    },
+    }
     async deleteAll() {
         await CommentModelClass.deleteMany()
     }
 }
+
+export const commentsRepository = new CommentsRepository()

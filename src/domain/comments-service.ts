@@ -4,47 +4,67 @@ import {usersRepository} from "../repositories/users-repository";
 import {CommentType, UserType} from "../types/types";
 import {v4} from "uuid";
 
-export const commentsService = {
-    async create(content: string, userId: ObjectId, postId: string): Promise<Omit<CommentType, "_id" | "postId">> {
-        const user: UserType | void | null = await usersRepository.findById(userId)
-        let comment: CommentType = {
-            _id: new ObjectId(),
-            id: v4(),
-            content: content,
-            userId: user!.id,
-            userLogin: user!.login,
-            createdAt: new Date(),
-            postId: postId
-        }
-        const createdComment = await commentsRepository.create(comment)
+class CommentsService {
+    async create(
+        content: string,
+        userId: ObjectId,
+        postId: string
+    ): Promise<Omit<CommentType, "_id" | "postId"> | null> {
+        const user: UserType | null = await usersRepository.findById(userId)
+        //todo --> nested object creation syntax
+        let likesCount: number = 0
+        let dislikesCount: number = 0
+        let myStatus: string = 'None'
+        let newComment = new CommentType(
+            new ObjectId(),
+            v4(),
+            content,
+            user!.id,
+            user!.login,
+            new Date(),
+            postId,
+            {
+                likesCount,
+                dislikesCount,
+                myStatus
+            }
+        )
+
+        let res = await commentsRepository.create(newComment)
+        if (!res) return null
+
         return {
-            id: createdComment.id,
-            content: createdComment.content,
-            userId: createdComment.userId,
-            userLogin: createdComment.userLogin,
-            createdAt: createdComment.createdAt
+            id: newComment.id,
+            content: newComment.content,
+            userId: newComment.userId,
+            userLogin: newComment.userLogin,
+            createdAt: newComment.createdAt,
+            likesInfo: newComment.likesInfo
         }
-    },
+    }
     async getPostComments(
-            postId: string,
-            pageNumber: number,
-            pageSize: number,
-            sortBy: string,
-            sortDirection: string) {
+        postId: string,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
         return await commentsRepository.findPostComments(
             postId,
             pageNumber,
             pageSize,
             sortBy,
-            sortDirection)
-    },
+            sortDirection
+        )
+    }
     async getCommentById(id: string) {
         return await commentsRepository.findCommentById(id)
-    },
+    }
     async updateComment(id: string, content: string) {
         return commentsRepository.updateComment(id, content)
-    },
+    }
     async delete(id: string): Promise<boolean> {
         return await commentsRepository.delete(id)
     }
 }
+
+export const commentsService = new CommentsService()

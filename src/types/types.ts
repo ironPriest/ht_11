@@ -11,13 +11,6 @@ export class BlogType {
     ) {
     }
 }
-// export type BlogType = WithId<{
-//     id: string
-//     name: string
-//     websiteUrl: string
-//     description: string
-//     createdAt: Date
-// }>
 export type PostType = WithId<{
     id: string
     title: string
@@ -34,14 +27,32 @@ export type UserType = WithId<{
     email: string
     createdAt: Date
 }>
-export type CommentType = WithId<{
-    id: string
-    content: string
-    userId: string
-    userLogin: string
-    createdAt: Date
-    postId: string
-}>
+
+export class CommentType {
+    constructor(
+        public _id: ObjectId,
+        public id: string,
+        public content: string,
+        public userId: string,
+        public userLogin: string,
+        public createdAt: Date,
+        public postId: string,
+        public likesInfo: {
+            likesCount: number,
+            dislikesCount: number,
+            myStatus: string
+        }
+    ) {
+    }
+}
+// export type CommentType = WithId<{
+//     id: string
+//     content: string
+//     userId: string
+//     userLogin: string
+//     createdAt: Date
+//     postId: string
+// }>
 export type EmailConfirmationType = WithId<{
     userId: string
     confirmationCode: string
