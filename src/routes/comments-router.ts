@@ -9,7 +9,7 @@ export const commentsRouter = Router({})
 class CommentsController {
     async updateLike(req: Request, res: Response) {
 
-        const comment = commentsService.getCommentById(req.params.commentId)
+        const comment = await commentsService.getCommentById(req.params.commentId)
         if (!comment) return res.sendStatus(404)
 
         let updateResult = await commentsService.updateLike(req.params.commentId, req.body.likeStatus)
