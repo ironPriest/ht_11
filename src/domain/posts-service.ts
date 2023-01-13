@@ -1,20 +1,20 @@
 import {PostType} from "../types/types";
 import {postsRepository} from "../repositories/posts-repository";
 
-export const postsService = {
+class PostsService {
     async getPosts(
         blogId: string | null,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
         sortDirection: string) {
-            return await postsRepository.getPosts(
-                blogId,
-                pageNumber,
-                pageSize,
-                sortBy,
-                sortDirection)
-    },
+        return await postsRepository.getPosts(
+            blogId,
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection)
+    }
     async getPostById(postId: string): Promise<Omit<PostType, '_id'> | null> {
         let post: PostType | null = await postsRepository.getPostById(postId)
         if (post) {
@@ -31,7 +31,7 @@ export const postsService = {
             return null
         }
 
-    },
+    }
     async createPost(title: string, shortDescription: string, content: string, bloggerId: string): Promise<Omit<PostType, "_id"> | undefined> {
         const createdPost = await postsRepository.createPost(title, shortDescription, content, bloggerId)
         if (createdPost) {
@@ -48,11 +48,13 @@ export const postsService = {
             return
         }
 
-    },
+    }
     async updatePost(postId: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
         return postsRepository.updatePost(postId, title, shortDescription, content, blogId)
-    },
+    }
     async deletePost(postId: string): Promise<boolean> {
         return postsRepository.deletePost(postId)
     }
 }
+
+export const postsService = new PostsService()

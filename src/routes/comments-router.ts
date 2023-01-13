@@ -6,12 +6,8 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 
 export const commentsRouter = Router({})
 
-commentsRouter
-    .put('/:id',
-        bearerAuthMiddleware,
-        commentValidation,
-        inputValidationMiddleware,
-        async (req, res) =>{
+class CommentsController {
+    async updateComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.id)
         if (comment) {
             if (req.user!.id !== comment.userId) {
@@ -28,10 +24,9 @@ commentsRouter
         } else {
             res.sendStatus(404)
         }
-    })
-    .delete('/:id',
-        bearerAuthMiddleware,
-        async (req: Request, res: Response) => {
+    }
+
+    async deleteComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.id)
         if (comment) {
             if (req.user!.id !== comment.userId) {
@@ -47,8 +42,9 @@ commentsRouter
         } else {
             res.sendStatus(404)
         }
-    })
-    .get('/:id', async (req: Request, res: Response) => {
+    }
+
+    async getComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.id)
         if (comment) {
             res.status(200).send(comment)
@@ -56,4 +52,25 @@ commentsRouter
             res.sendStatus(404)
         }
 
-    })
+    }
+}
+
+const commentsController = new CommentsController()
+
+commentsRouter
+    .put(
+        '/:id',
+        bearerAuthMiddleware,
+        commentValidation,
+        inputValidationMiddleware,
+        commentsController.updateComment
+    )
+    .delete(
+        '/:id',
+        bearerAuthMiddleware,
+        commentsController.deleteComment
+    )
+    .get(
+        '/:id',
+        commentsController.getComment
+    )

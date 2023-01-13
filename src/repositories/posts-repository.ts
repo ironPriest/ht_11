@@ -3,13 +3,13 @@ import {BlogModelClass, PostModelClass} from "./db";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 
-export const postsRepository = {
+class PostsRepository {
     async getPosts(
-            blogId: string | null,
-            pageNumber: number,
-            pageSize: number,
-            sortBy: string,
-            sortDirection: string) {
+        blogId: string | null,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
 
         let totalCount = await PostModelClass.count()
         let pageCount = Math.ceil(+totalCount / pageSize)
@@ -22,11 +22,11 @@ export const postsRepository = {
         }
 
         let query = PostModelClass.
-            find().
-            select('-_id').
-            sort(sortFilter).
-            skip((pageNumber - 1) * pageSize).
-            limit(pageSize)
+        find().
+        select('-_id').
+        sort(sortFilter).
+        skip((pageNumber - 1) * pageSize).
+        limit(pageSize)
 
         if (blogId) {
             query = query.find({blogId})
@@ -39,46 +39,46 @@ export const postsRepository = {
             "totalCount": totalCount,
             "items": await query
         }
-    },
+    }
     //todo what better: id vs postId
     async getPostById(postId: string): Promise<PostType | null> {
         return PostModelClass.findOne({id: postId}).lean()
-    },
+    }
     async createPost(
         title: string,
         shortDescription: string,
         content: string,
         blogId: string): Promise<PostType | null> {
 
-            let blogInstance = await BlogModelClass.findOne({id: blogId})
-            if (!blogInstance) return null
+        let blogInstance = await BlogModelClass.findOne({id: blogId})
+        if (!blogInstance) return null
 
-            // let newPost: PostType
-            // await PostModelClass.create( newPost = {
-            //         _id: new ObjectId(),
-            //         id: v4(),
-            //         title: title,
-            //         shortDescription: shortDescription,
-            //         content: content,
-            //         blogId: blogId,
-            //         bloggerName: blogger?.name,
-            //         createdAt: new Date()
-            // })
+        // let newPost: PostType
+        // await PostModelClass.create( newPost = {
+        //         _id: new ObjectId(),
+        //         id: v4(),
+        //         title: title,
+        //         shortDescription: shortDescription,
+        //         content: content,
+        //         blogId: blogId,
+        //         bloggerName: blogger?.name,
+        //         createdAt: new Date()
+        // })
 
-            const newPostInstance = new PostModelClass()
-            newPostInstance._id = new ObjectId()
-            newPostInstance.id = v4()
-            newPostInstance.title = title
-            newPostInstance.shortDescription = shortDescription
-            newPostInstance.content = content
-            newPostInstance.blogId = blogId
-            newPostInstance.blogName = blogInstance.name
-            newPostInstance.createdAt = new Date()
+        const newPostInstance = new PostModelClass()
+        newPostInstance._id = new ObjectId()
+        newPostInstance.id = v4()
+        newPostInstance.title = title
+        newPostInstance.shortDescription = shortDescription
+        newPostInstance.content = content
+        newPostInstance.blogId = blogId
+        newPostInstance.blogName = blogInstance.name
+        newPostInstance.createdAt = new Date()
 
-            await newPostInstance.save()
+        await newPostInstance.save()
 
-            return newPostInstance
-        },
+        return newPostInstance
+    }
     async updatePost(
         postId: string,
         title: string,
@@ -104,7 +104,7 @@ export const postsRepository = {
         await postInstance.save()
 
         return true
-    },
+    }
     async deletePost(postId: string): Promise<boolean> {
         // let result = await PostModelClass.deleteOne({id: postId})
         // return result.deletedCount === 1
@@ -115,8 +115,10 @@ export const postsRepository = {
         await postInstance.deleteOne()
 
         return true
-    },
+    }
     async deleteAll() {
         await PostModelClass.deleteMany()
     }
 }
+
+export const postsRepository = new PostsRepository()
