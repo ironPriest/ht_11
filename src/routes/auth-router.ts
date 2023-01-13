@@ -86,7 +86,6 @@ authRouter.post('/login',
     async (req: Request, res: Response) => {
 
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
-        console.log('user',user)
         if (!user) return res.sendStatus(401)
         const userId = user._id
 
@@ -128,7 +127,6 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
         const user = await usersService.findById(userId)
         if (!user) {
-            console.log('cant find user')
             return res.sendStatus(401)
         }
 
@@ -211,7 +209,6 @@ authRouter.post(
         if(!recoveryCodeEntity) return res.sendStatus(404)
 
         let user = await usersService.findByEmail(recoveryCodeEntity.email)
-        console.log('user /new-password',user)
         if (!user) return res.sendStatus(404)
 
         await authService.newPassword(user.id, req.body.newPassword)

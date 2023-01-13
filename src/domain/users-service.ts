@@ -22,7 +22,6 @@ export const usersService = {
         }
         let res = await usersRepository.create(user)
         if(!res){
-            console.log("error")
             return
         }
         return {

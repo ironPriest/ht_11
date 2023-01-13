@@ -16,21 +16,16 @@ securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     const blackToken: TokenType | null = await blackTokensRepository.check(token)
     if (blackToken) return res.sendStatus(401)
 
-    console.log('blackToken: ', blackToken)
-
     const userId = await jwtUtility.getUserIdByToken(token)
 
-    console.log('userId: ', userId)
     if (!userId) return res.sendStatus(401)
 
     const checkSession = await deviceAuthSessionsRepository.getSessionByUserId(userId)
 
-    console.log('çheckSession: ', checkSession)
     if (!checkSession) return res.sendStatus(401)
 
     const sessions = await deviceAuthSessionsService.getSessions(userId)
 
-    console.log('sessions: ', sessions)
     return res.status(200).send(sessions)
 })
 securityDevicesRouter.delete('/', async (req: Request, res: Response) => {

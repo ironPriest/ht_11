@@ -19,14 +19,14 @@ class CommentsController {
     }
 
     async updateComment(req: Request, res: Response) {
-        const comment = await commentsService.getCommentById(req.params.id)
+        const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
             if (req.user!.id !== comment.userId) {
                 res.sendStatus(403)
             } else {
-                const isUpdated = await commentsService.updateComment(req.params.id, req.body.content)
+                const isUpdated = await commentsService.updateComment(req.params.commentId, req.body.content)
                 if (isUpdated) {
-                    const comment = await commentsService.getCommentById(req.params.id)
+                    const comment = await commentsService.getCommentById(req.params.commentId)
                     res.sendStatus(204)
                 } else {
                     res.sendStatus(404)
@@ -38,7 +38,7 @@ class CommentsController {
     }
 
     async deleteComment(req: Request, res: Response) {
-        const comment = await commentsService.getCommentById(req.params.id)
+        const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
             if (req.user!.id !== comment.userId) {
                 res.sendStatus(403)
@@ -56,7 +56,7 @@ class CommentsController {
     }
 
     async getComment(req: Request, res: Response) {
-        const comment = await commentsService.getCommentById(req.params.id)
+        const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
             res.status(200).send(comment)
         } else {
@@ -70,23 +70,23 @@ const commentsController = new CommentsController()
 
 commentsRouter
     .put(
-        '/:id/like-status',
+        '/:commentId/like-status',
         bearerAuthMiddleware,
         commentsController.updateLike
     )
     .put(
-        '/:id',
+        '/:commentId',
         bearerAuthMiddleware,
         commentValidation,
         inputValidationMiddleware,
         commentsController.updateComment
     )
     .delete(
-        '/:id',
+        '/:commentId',
         bearerAuthMiddleware,
         commentsController.deleteComment
     )
     .get(
-        '/:id',
+        '/:commentId',
         commentsController.getComment
     )

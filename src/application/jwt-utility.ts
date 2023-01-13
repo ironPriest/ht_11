@@ -14,17 +14,14 @@ export const jwtUtility = {
     async getUserIdByToken(token: string) {
         try {
             const result: any = await jwt.verify(token, settings.JWT_SECRET)
-            console.log('RESULT: ', result)
             return new ObjectId(result.userId)
         } catch (error) {
-            console.log('error: ', error)
             return null
         }
     },
     async getDeviceIdByToken(token: string) {
         try {
             const result: any = await jwt.verify(token, settings.JWT_SECRET)
-            console.log('verify result --->', result)
             return result.deviceId
         } catch (error) {
             return null
