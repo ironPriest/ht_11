@@ -19,29 +19,27 @@ class CommentsRepository {
 
         return true
     }
+
     async findPostComments(
         postId: string,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
-        sortDirection: string) {
+        sortDirection: string
+    ) {
         let totalCount = await CommentModelClass.count({postId})
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
         switch (sortDirection) {
-            case ('Asc'): sortFilter[sortBy] = 1
+            case ('Asc'):
+                sortFilter[sortBy] = 1
                 break
-            case ('Desc'): sortFilter[sortBy] = -1
+            case ('Desc'):
+                sortFilter[sortBy] = -1
                 break
         }
 
-        let query = CommentModelClass.
-        find().
-        where('postId').equals(postId).
-        select('-_id -postId').
-        sort(sortFilter).
-        skip((pageNumber - 1) * pageSize).
-        limit(pageSize)
+        let query = CommentModelClass.find().where('postId').equals(postId).select('-_id -postId').sort(sortFilter).skip((pageNumber - 1) * pageSize).limit(pageSize)
 
         return {
             "pagesCount": pageCount,
@@ -51,13 +49,20 @@ class CommentsRepository {
             "items": await query
         }
     }
-    async findCommentById(id: string): Promise<Omit<CommentType, '_id, postId'> | null> {
 
-        return CommentModelClass.
-        findOne({id}).
-        select('-__v -_id -postId').
-        lean()
+    async updateLike(id: string, likeStatus: string): Promise<boolean> {
+
+        const commentInstance = await CommentModelClass.findOne({id})
+        if (!commentInstance) return false
+
+        commentInstance.likesInfo.myStatus = likeStatus
+
+        await commentInstance.save()
+
+        return true
+
     }
+
     async updateComment(id: string, content: string): Promise<boolean> {
 
         const commentInstance = await CommentModelClass.findOne({id})
@@ -69,6 +74,7 @@ class CommentsRepository {
 
         return true
     }
+
     async delete(id: string) {
 
         const commentInstance = await CommentModelClass.findOne({id})
@@ -78,6 +84,12 @@ class CommentsRepository {
 
         return true
     }
+
+    async findCommentById(id: string): Promise<Omit<CommentType, '_id, postId'> | null> {
+
+        return CommentModelClass.findOne({id}).select('-__v -_id -postId').lean()
+    }
+
     async deleteAll() {
         await CommentModelClass.deleteMany()
     }

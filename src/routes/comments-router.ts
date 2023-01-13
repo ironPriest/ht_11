@@ -7,6 +7,17 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 export const commentsRouter = Router({})
 
 class CommentsController {
+    async updateLike(req: Request, res: Response) {
+
+        const comment = commentsService.getCommentById(req.params.id)
+        if (!comment) return res.sendStatus(404)
+
+        let updateResult = await commentsService.updateLike(req.params.id, req.body.likeStatus)
+        if (!updateResult) return res.sendStatus(400)
+
+        res.sendStatus(204)
+    }
+
     async updateComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.id)
         if (comment) {
@@ -58,6 +69,11 @@ class CommentsController {
 const commentsController = new CommentsController()
 
 commentsRouter
+    .put(
+        '/:id/like-status',
+        bearerAuthMiddleware,
+        commentsController.updateLike
+    )
     .put(
         '/:id',
         bearerAuthMiddleware,

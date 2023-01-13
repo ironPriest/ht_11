@@ -42,6 +42,7 @@ class CommentsService {
             likesInfo: newComment.likesInfo
         }
     }
+
     async getPostComments(
         postId: string,
         pageNumber: number,
@@ -56,14 +57,21 @@ class CommentsService {
             sortDirection
         )
     }
-    async getCommentById(id: string) {
-        return await commentsRepository.findCommentById(id)
+
+    async updateLike(id: string, likeStatus: string): Promise<boolean> {
+        return commentsRepository.updateLike(id, likeStatus)
     }
+
     async updateComment(id: string, content: string) {
         return commentsRepository.updateComment(id, content)
     }
+
     async delete(id: string): Promise<boolean> {
         return await commentsRepository.delete(id)
+    }
+
+    async getCommentById(id: string) {
+        return await commentsRepository.findCommentById(id)
     }
 }
 
