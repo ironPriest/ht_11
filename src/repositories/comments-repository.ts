@@ -87,7 +87,11 @@ class CommentsRepository {
 
     async findCommentById(id: string): Promise<Omit<CommentType, '_id, postId'> | null> {
 
-        return CommentModelClass.findOne({id}).select('-__v -_id -postId').lean()
+        return CommentModelClass.
+            findOne({id}).
+            select('-__v -_id -postId').
+            lean()
+
     }
 
     async deleteAll() {

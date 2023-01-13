@@ -70,7 +70,7 @@ class CommentsService {
         return await commentsRepository.delete(id)
     }
 
-    async getCommentById(id: string) {
+    async getCommentById(id: string): Promise<CommentType | null> {
         return await commentsRepository.findCommentById(id)
     }
 }
