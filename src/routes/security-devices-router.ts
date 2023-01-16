@@ -17,11 +17,9 @@ securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     if (blackToken) return res.sendStatus(401)
 
     const userId = await jwtUtility.getUserIdByToken(token)
-
     if (!userId) return res.sendStatus(401)
 
     const checkSession = await deviceAuthSessionsRepository.getSessionByUserId(userId)
-
     if (!checkSession) return res.sendStatus(401)
 
     const sessions = await deviceAuthSessionsService.getSessions(userId)

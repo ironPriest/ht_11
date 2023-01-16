@@ -58,11 +58,14 @@ class CommentsController {
     async getComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
-            res.status(200).send(comment)
+            if (!req.headers.authorization) {
+                comment.likesInfo.myStatus = 'None'
+                return res.status(200).send(comment)
+            }
+            return res.status(200).send(comment)
         } else {
-            res.sendStatus(404)
+            return res.sendStatus(404)
         }
-
     }
 }
 
