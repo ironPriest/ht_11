@@ -60,6 +60,7 @@ class CommentsController {
         if (comment) {
             if (!req.headers.authorization) {
                 comment.likesInfo.myStatus = 'None'
+                console.log('--> unauthorized likeStatus request', comment)
                 return res.status(200).send(comment)
             }
             return res.status(200).send(comment)
