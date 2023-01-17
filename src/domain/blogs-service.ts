@@ -33,14 +33,7 @@ class BlogsService {
 
     }
     async createBlog(name: string, websiteUrl: string, description: string): Promise<Omit<BlogType, "_id">> {
-        // let newBlog: BlogType = {
-        //     _id: new ObjectId(),
-        //     id: v4(),
-        //     name: name,
-        //     websiteUrl: websiteUrl,
-        //     description: description,
-        //     createdAt: new Date()
-        // }
+
         let newBlog = new BlogType(
             new ObjectId(),
             v4(),

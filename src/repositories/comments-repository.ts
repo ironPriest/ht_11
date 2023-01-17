@@ -94,6 +94,23 @@ class CommentsRepository {
 
     }
 
+    // async countLikes(id: string, likeStatus: string): Promise<boolean> {
+    //
+    //     const comment = await CommentModelClass.findOne({id})
+    //     if (!comment) return false
+    //
+    //     switch (likeStatus) {
+    //         case 'Like':
+    //             comment.likesInfo.likesCount++
+    //             break
+    //         case 'Dislike':
+    //             comment.likesInfo.dislikesCount++
+    //             break
+    //     }
+    //
+    //     return true
+    // }
+
     async deleteAll() {
         await CommentModelClass.deleteMany()
     }

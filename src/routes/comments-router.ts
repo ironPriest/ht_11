@@ -3,6 +3,7 @@ import {commentsService} from "../domain/comments-service";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {commentValidation} from "./posts-router";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
+import {likesStatusesService} from "../domain/like-statuses-service";
 
 export const commentsRouter = Router({})
 
@@ -12,7 +13,14 @@ class CommentsController {
         const comment = await commentsService.getCommentById(req.params.commentId)
         if (!comment) return res.sendStatus(404)
 
-        let updateResult = await commentsService.updateLike(req.params.commentId, req.body.likeStatus)
+        //let updateResult = await commentsService.updateLike(req.params.commentId, req.body.likeStatus)
+        const likeStatusEntity = await likesStatusesService.checkExistence(req.user.id, req.params.commentId)
+        if (!likeStatusEntity) {
+            const creationResult = await likesStatusesService.create(req.user.id, req.params.commentId, req.body.likeStatus)
+            if (!creationResult) return res.sendStatus(400)
+        }
+
+        const updateResult = await likesStatusesService.update(req.user.id, req.params.commentId, req.body.likeStatus)
         if (!updateResult) return res.sendStatus(400)
 
         res.sendStatus(204)
@@ -58,9 +66,10 @@ class CommentsController {
     async getComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
+            comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
+            comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
             if (!req.headers.authorization) {
                 comment.likesInfo.myStatus = 'None'
-                console.log('--> unauthorized likeStatus request', comment)
                 return res.status(200).send(comment)
             }
             return res.status(200).send(comment)

@@ -9,7 +9,7 @@ import {
     TokenType,
     DeviceAuthSessionType,
     TimeStampType,
-    RecoveryCodeType
+    RecoveryCodeType, LikeStatus
 } from '../types/types'
 
 //const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
@@ -109,6 +109,13 @@ const RecoveryCodeSchema = new mongoose.Schema<RecoveryCodeType>({
     recoveryCode: {type: String, required: true}
 })
 export const RecoveryCodeModelClass = mongoose.model('recoveryCodes', RecoveryCodeSchema)
+
+const LikeStatusSchema = new mongoose.Schema<LikeStatus>({
+    userId: {type: String, required: true},
+    commentId: {type: String, required: true},
+    likeStatus: {type: String, required: true}
+})
+export const LikeStatusModelClass = mongoose.model('likeStatuses', LikeStatusSchema)
 
 export async function runDb() {
     try {

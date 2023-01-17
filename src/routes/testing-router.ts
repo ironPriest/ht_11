@@ -10,6 +10,7 @@ import {emailConfirmationRepository} from "../repositories/emailconfirmation-rep
 import {blackTokensRepository} from "../repositories/blacktockens-repository";
 import {timeStampsRepository} from "../repositories/time-stamps-repository";
 import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
+import {likeStatusesRepository} from "../repositories/like-statuses-repository";
 
 export const testingRouter = Router({})
 
@@ -23,6 +24,7 @@ testingRouter.delete('/all-data', async (req: Request, res: Response) => {
     await deviceAuthSessionsRepository.deleteAll()
     await timeStampsRepository.deleteAll()
     await recoveryCodesRepository.deleteAll()
+    await likeStatusesRepository.deleteAll()
 
     res.sendStatus(204)
 })

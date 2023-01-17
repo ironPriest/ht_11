@@ -58,6 +58,7 @@ class CommentsService {
         )
     }
 
+    //TODO --> remove this
     async updateLike(id: string, likeStatus: string): Promise<boolean> {
         return commentsRepository.updateLike(id, likeStatus)
     }

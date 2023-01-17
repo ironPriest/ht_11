@@ -11,6 +11,7 @@ export class BlogType {
     ) {
     }
 }
+
 export class PostType {
     constructor(
         public _id: ObjectId,
@@ -24,15 +25,7 @@ export class PostType {
     ) {
     }
 }
-// export type PostType = WithId<{
-//     id: string
-//     title: string
-//     shortDescription: string
-//     content: string
-//     blogId: string
-//     blogName: string
-//     createdAt: Date
-// }>
+
 export type UserType = WithId<{
     id: string
     login: string
@@ -84,3 +77,12 @@ export type RecoveryCodeType = WithId<{
     email: string
     recoveryCode: string
 }>
+export class LikeStatus {
+    constructor(
+        public _id: ObjectId,
+        public userId: string,
+        public commentId: string,
+        public likeStatus: string
+    ) {
+    }
+}
