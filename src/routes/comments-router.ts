@@ -4,6 +4,7 @@ import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {commentValidation} from "./posts-router";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {likesStatusesService} from "../domain/like-statuses-service";
+import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 
 export const commentsRouter = Router({})
 
@@ -18,6 +19,8 @@ class CommentsController {
         if (!likeStatusEntity) {
             const creationResult = await likesStatusesService.create(req.user.id, req.params.commentId, req.body.likeStatus)
             if (!creationResult) return res.sendStatus(400)
+
+            res.sendStatus(204)
         }
 
         const updateResult = await likesStatusesService.update(req.user.id, req.params.commentId, req.body.likeStatus)
@@ -69,13 +72,25 @@ class CommentsController {
 
             comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
             comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
-            const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
-            if(!myStatus) return res.sendStatus(404)
-            comment.likesInfo.myStatus = myStatus
-            if (!req.headers.authorization) {
-                comment.likesInfo.myStatus = 'None'
-                return res.status(200).send(comment)
+
+            //if req.userId -> get likes by commentId and userId
+            //else myStatus = none
+            let myStatus: string
+            if (req.user) {
+                const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+                if (!statusRes) return res.sendStatus(404)
+                myStatus = statusRes
+            } else {
+                myStatus = 'None'
             }
+
+            //const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+            //if(!myStatus) return res.sendStatus(404)
+            comment.likesInfo.myStatus = myStatus
+            // if (!req.headers.authorization) {
+            //     comment.likesInfo.myStatus = 'None'
+            //     return res.status(200).send(comment)
+            // }
             return res.status(200).send(comment)
         } else {
             return res.sendStatus(404)
@@ -105,5 +120,6 @@ commentsRouter
     )
     .get(
         '/:commentId',
+        userCheckMiddleware,
         commentsController.getComment
     )

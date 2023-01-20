@@ -2,9 +2,9 @@ import {NextFunction, Request, Response} from "express";
 import {jwtUtility} from "../application/jwt-utility";
 import {usersService} from "../domain/users-service";
 
-export const bearerAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.headers.authorization) {
-        return res.send(401)
+        return next()
     }
 
     const token = req.headers.authorization.split(' ')[1]
@@ -12,8 +12,8 @@ export const bearerAuthMiddleware = async (req: Request, res: Response, next: Ne
     const userId = await jwtUtility.getUserIdByToken(token)
     if (userId) {
         req.user = await usersService.findById(userId)
-        next()
+        return next()
     } else {
-        return res.send(401)
+        return next()
     }
 }
