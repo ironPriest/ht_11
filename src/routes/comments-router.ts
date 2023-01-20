@@ -78,6 +78,7 @@ class CommentsController {
             let myStatus: string
             if (req.user) {
                 const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+                console.log('statusRes --> ', statusRes)
                 if (!statusRes) return res.sendStatus(404)
                 myStatus = statusRes
             } else {
@@ -120,6 +121,6 @@ commentsRouter
     )
     .get(
         '/:commentId',
-        //userCheckMiddleware,
+        userCheckMiddleware,
         commentsController.getComment
     )
