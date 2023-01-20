@@ -29,7 +29,7 @@ class LikeStatusesService {
     }
 
     async dislikesCount(commentId: string): Promise<number> {
-        return await likeStatusesRepository.likesCount(commentId)
+        return await likeStatusesRepository.dislikesCount(commentId)
     }
 
     async getMyStatus(userId: string, commentId: string): Promise<string | null> {

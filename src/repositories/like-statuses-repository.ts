@@ -43,11 +43,11 @@ class LikeStatusesRepository {
     }
 
     async likesCount(commentId: string): Promise<number> {
-        return LikeStatusModelClass.count({commentId, likeStatus: 'Like'})
+        return LikeStatusModelClass.count({commentId, likeStatus: 'Like'}).lean()
     }
 
     async dislikesCount(commentId: string): Promise<number> {
-        return LikeStatusModelClass.count({commentId, likeStatus: 'Dislike'})
+        return LikeStatusModelClass.count({commentId, likeStatus: 'Dislike'}).lean()
     }
 
     async deleteAll() {
