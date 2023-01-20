@@ -69,6 +69,9 @@ class CommentsController {
 
             comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
             comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
+            const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+            if(!myStatus) return res.sendStatus(404)
+            comment.likesInfo.myStatus = myStatus
             if (!req.headers.authorization) {
                 comment.likesInfo.myStatus = 'None'
                 return res.status(200).send(comment)

@@ -16,8 +16,8 @@ class LikeStatusesService {
         return await likeStatusesRepository.create(newLikeStatus)
     }
 
-    async checkExistence(userId: string, commentId: string): Promise<boolean> {
-        return await likeStatusesRepository.checkExistence(userId, commentId);
+    async checkExistence(userId: string, commentId: string): Promise<LikeStatus | null> {
+        return await likeStatusesRepository.getLikeStatus(userId, commentId);
     }
 
     async update(userId: string, commentId: string, likeStatus: string): Promise<boolean> {
@@ -30,6 +30,12 @@ class LikeStatusesService {
 
     async dislikesCount(commentId: string): Promise<number> {
         return await likeStatusesRepository.likesCount(commentId)
+    }
+
+    async getMyStatus(userId: string, commentId: string): Promise<string | null> {
+        const likeStatus = await likeStatusesRepository.getLikeStatus(userId, commentId)
+        if (!likeStatus) return null
+        return likeStatus.likeStatus
     }
 }
 

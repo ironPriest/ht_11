@@ -15,16 +15,16 @@ class LikeStatusesRepository {
         return true
     }
 
-    async checkExistence(userId: string, commentId: string): Promise<boolean> {
+    async getLikeStatus(userId: string, commentId: string): Promise<LikeStatus | null> {
 
         const likeStatus = await LikeStatusModelClass.
             findOne().
             where('userId').equals(userId).
             where('commentId').equals(commentId).
             lean()
-        if (!likeStatus) return false
+        if (!likeStatus) return null
 
-        return true
+        return likeStatus
     }
 
     async update(userId: string, commentId: string, likeStatus: string): Promise<boolean> {
