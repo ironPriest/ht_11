@@ -5,10 +5,10 @@ export const recoveryCodesRepository = {
     async create(newRecoveryCode: RecoveryCodeType): Promise<boolean> {
         //await RecoveryCodeModelClass.insertOne(recoveryCode)
 
-        const newRecoveryCodeInstance = new RecoveryCodeModelClass()
-        newRecoveryCodeInstance._id = newRecoveryCode._id
-        newRecoveryCodeInstance.email = newRecoveryCode.email
-        newRecoveryCodeInstance.recoveryCode = newRecoveryCode.recoveryCode
+        const newRecoveryCodeInstance = new RecoveryCodeModelClass(newRecoveryCode)
+        // newRecoveryCodeInstance._id = newRecoveryCode._id
+        // newRecoveryCodeInstance.email = newRecoveryCode.email
+        // newRecoveryCodeInstance.recoveryCode = newRecoveryCode.recoveryCode
 
         await newRecoveryCodeInstance.save()
 

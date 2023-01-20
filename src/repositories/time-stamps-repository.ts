@@ -6,11 +6,11 @@ export const timeStampsRepository = {
     async add(newTimeStamp: TimeStampType): Promise<boolean> {
         //await TimeStampModelClass.insertOne(timeStamp)
 
-        const newTimeStampInstance = new TimeStampModelClass()
-        newTimeStampInstance._id = newTimeStamp._id
-        newTimeStampInstance.route = newTimeStamp.route
-        newTimeStampInstance.ip = newTimeStamp.ip
-        newTimeStampInstance.timeStamp = newTimeStamp.timeStamp
+        const newTimeStampInstance = new TimeStampModelClass(newTimeStamp)
+        // newTimeStampInstance._id = newTimeStamp._id
+        // newTimeStampInstance.route = newTimeStamp.route
+        // newTimeStampInstance.ip = newTimeStamp.ip
+        // newTimeStampInstance.timeStamp = newTimeStamp.timeStamp
 
         await newTimeStampInstance.save()
 

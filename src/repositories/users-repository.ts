@@ -5,14 +5,14 @@ import {ObjectId} from "mongodb";
 export const usersRepository = {
     async create(newUser: UserType): Promise<UserType> {
 
-        const newUserInstance = new UserModelClass()
+        const newUserInstance = new UserModelClass(newUser)
 
-        newUserInstance._id = newUser._id
-        newUserInstance.id = newUser.id
-        newUserInstance.login = newUser.login
-        newUserInstance.passwordHash = newUser.passwordHash
-        newUserInstance.email = newUser.email
-        newUserInstance.createdAt = newUser.createdAt
+        // newUserInstance._id = newUser._id
+        // newUserInstance.id = newUser.id
+        // newUserInstance.login = newUser.login
+        // newUserInstance.passwordHash = newUser.passwordHash
+        // newUserInstance.email = newUser.email
+        // newUserInstance.createdAt = newUser.createdAt
 
         await newUserInstance.save()
 

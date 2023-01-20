@@ -7,9 +7,9 @@ export const blackTokensRepository = {
         // let res = await BlackTokenModelClass.insertOne(token)
         // return res.acknowledged
 
-        const newBlackTokenInstance = new BlackTokenModelClass()
-        newBlackTokenInstance._id = token._id
-        newBlackTokenInstance.token = token.token
+        const newBlackTokenInstance = new BlackTokenModelClass(token)
+        // newBlackTokenInstance._id = token._id
+        // newBlackTokenInstance.token = token.token
 
         await newBlackTokenInstance.save()
 

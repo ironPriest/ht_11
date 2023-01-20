@@ -4,11 +4,11 @@ import {LikeStatus} from "../types/types";
 class LikeStatusesRepository {
     async create(newLikeStatus: LikeStatus): Promise<boolean> {
 
-        const newLikeStatusInstance = new LikeStatusModelClass()
+        const newLikeStatusInstance = new LikeStatusModelClass(newLikeStatus)
 
-        newLikeStatusInstance.userId = newLikeStatus.userId
-        newLikeStatusInstance.commentId = newLikeStatus.commentId
-        newLikeStatusInstance.likeStatus = newLikeStatus.likeStatus
+        // newLikeStatusInstance.userId = newLikeStatus.userId
+        // newLikeStatusInstance.commentId = newLikeStatus.commentId
+        // newLikeStatusInstance.likeStatus = newLikeStatus.likeStatus
 
         await newLikeStatusInstance.save()
 

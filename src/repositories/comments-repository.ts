@@ -4,16 +4,16 @@ import {CommentModelClass} from "./db";
 class CommentsRepository {
     async create(newComment: CommentType): Promise<boolean> {
 
-        const newCommentInstance = new CommentModelClass()
-        newCommentInstance.id = newComment.id
-        newCommentInstance.content = newComment.content
-        newCommentInstance.userId = newComment.userId
-        newCommentInstance.userLogin = newComment.userLogin
-        newCommentInstance.createdAt = newComment.createdAt
-        newCommentInstance.postId = newComment.postId
-        newCommentInstance.likesInfo.likesCount = newComment.likesInfo.likesCount
-        newCommentInstance.likesInfo.dislikesCount = newComment.likesInfo.dislikesCount
-        newCommentInstance.likesInfo.myStatus = newComment.likesInfo.myStatus
+        const newCommentInstance = new CommentModelClass(newComment)
+        // newCommentInstance.id = newComment.id
+        // newCommentInstance.content = newComment.content
+        // newCommentInstance.userId = newComment.userId
+        // newCommentInstance.userLogin = newComment.userLogin
+        // newCommentInstance.createdAt = newComment.createdAt
+        // newCommentInstance.postId = newComment.postId
+        // newCommentInstance.likesInfo.likesCount = newComment.likesInfo.likesCount
+        // newCommentInstance.likesInfo.dislikesCount = newComment.likesInfo.dislikesCount
+        // newCommentInstance.likesInfo.myStatus = newComment.likesInfo.myStatus
 
         await newCommentInstance.save()
 

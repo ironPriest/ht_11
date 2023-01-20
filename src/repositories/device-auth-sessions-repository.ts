@@ -5,14 +5,14 @@ import {ObjectId} from "mongodb";
 export const deviceAuthSessionsRepository = {
     async create(deviceAuthSession: DeviceAuthSessionType): Promise<boolean> {
 
-        const newDeviceAuthSessionInstance = new DeviceAuthSessionModelClass()
-        newDeviceAuthSessionInstance._id = deviceAuthSession._id
-        newDeviceAuthSessionInstance.lastActiveDate = deviceAuthSession.lastActiveDate
-        newDeviceAuthSessionInstance.deviceId = deviceAuthSession.deviceId
-        newDeviceAuthSessionInstance.ip = deviceAuthSession.ip
-        newDeviceAuthSessionInstance.title = deviceAuthSession.title
-        newDeviceAuthSessionInstance.userId = deviceAuthSession.userId
-        newDeviceAuthSessionInstance.rtExpDate = deviceAuthSession.rtExpDate
+        const newDeviceAuthSessionInstance = new DeviceAuthSessionModelClass(deviceAuthSession)
+        // newDeviceAuthSessionInstance._id = deviceAuthSession._id
+        // newDeviceAuthSessionInstance.lastActiveDate = deviceAuthSession.lastActiveDate
+        // newDeviceAuthSessionInstance.deviceId = deviceAuthSession.deviceId
+        // newDeviceAuthSessionInstance.ip = deviceAuthSession.ip
+        // newDeviceAuthSessionInstance.title = deviceAuthSession.title
+        // newDeviceAuthSessionInstance.userId = deviceAuthSession.userId
+        // newDeviceAuthSessionInstance.rtExpDate = deviceAuthSession.rtExpDate
 
         await newDeviceAuthSessionInstance.save()
 

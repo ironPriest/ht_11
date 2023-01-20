@@ -4,12 +4,12 @@ import {EmailConfirmationModelClass} from "./db";
 export const emailConfirmationRepository = {
     async create(newEmailConformation: EmailConfirmationType): Promise<boolean> {
 
-        const newEmailConfirmationInstance = new EmailConfirmationModelClass()
-        newEmailConfirmationInstance._id = newEmailConformation._id
-        newEmailConfirmationInstance.userId = newEmailConformation.userId
-        newEmailConfirmationInstance.confirmationCode = newEmailConformation.confirmationCode
-        newEmailConfirmationInstance.expirationDate = newEmailConformation.expirationDate
-        newEmailConfirmationInstance.isConfirmed = newEmailConformation.isConfirmed
+        const newEmailConfirmationInstance = new EmailConfirmationModelClass(newEmailConformation)
+        // newEmailConfirmationInstance._id = newEmailConformation._id
+        // newEmailConfirmationInstance.userId = newEmailConformation.userId
+        // newEmailConfirmationInstance.confirmationCode = newEmailConformation.confirmationCode
+        // newEmailConfirmationInstance.expirationDate = newEmailConformation.expirationDate
+        // newEmailConfirmationInstance.isConfirmed = newEmailConformation.isConfirmed
 
         await newEmailConfirmationInstance.save()
 
