@@ -3,6 +3,7 @@ import {jwtUtility} from "../application/jwt-utility";
 import {usersService} from "../domain/users-service";
 
 export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    console.log('headers -->', req.headers)
     if (!req.headers.authorization) {
         return next()
     }
