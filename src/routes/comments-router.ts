@@ -69,10 +69,10 @@ class CommentsController {
     async getComment(req: Request, res: Response) {
         let comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
-
+            console.log('-- comment found --')
             comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
             comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
-
+            console.log('likesInfo -->', comment.likesInfo)
             //if req.userId -> get likes by commentId and userId
             //else myStatus = none
             let myStatus: string
