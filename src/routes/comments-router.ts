@@ -15,18 +15,18 @@ class CommentsController {
         if (!comment) return res.sendStatus(404)
 
         //let updateResult = await commentsService.updateLike(req.params.commentId, req.body.likeStatus)
+        // updateOne({}, {}, {upsert: true})
         const likeStatusEntity = await likesStatusesService.checkExistence(req.user.id, req.params.commentId)
         if (!likeStatusEntity) {
             const creationResult = await likesStatusesService.create(req.user.id, req.params.commentId, req.body.likeStatus)
             if (!creationResult) return res.sendStatus(400)
-
-            res.sendStatus(204)
+            return res.sendStatus(204)
+        } else {
+            const updateResult = await likesStatusesService.update(req.user.id, req.params.commentId, req.body.likeStatus)
+            if (!updateResult) return res.sendStatus(400)
+            return res.sendStatus(204)
         }
 
-        const updateResult = await likesStatusesService.update(req.user.id, req.params.commentId, req.body.likeStatus)
-        if (!updateResult) return res.sendStatus(400)
-
-        res.sendStatus(204)
     }
 
     async updateComment(req: Request, res: Response) {
