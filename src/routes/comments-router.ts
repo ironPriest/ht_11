@@ -67,6 +67,7 @@ class CommentsController {
     }
 
     async getComment(req: Request, res: Response) {
+        console.log('-- handler input --')
         let comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
             console.log('-- comment found --')
