@@ -121,6 +121,6 @@ commentsRouter
     )
     .get(
         '/:commentId',
-        userCheckMiddleware,
+        //userCheckMiddleware,
         commentsController.getComment
     )
