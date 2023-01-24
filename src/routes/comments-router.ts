@@ -16,6 +16,7 @@ class CommentsController {
 
         //let updateResult = await commentsService.updateLike(req.params.commentId, req.body.likeStatus)
         // updateOne({}, {}, {upsert: true})
+        //todo upsert id possible here
         const likeStatusEntity = await likesStatusesService.checkExistence(req.user.id, req.params.commentId)
         if (!likeStatusEntity) {
             const creationResult = await likesStatusesService.create(req.user.id, req.params.commentId, req.body.likeStatus)
@@ -76,15 +77,13 @@ class CommentsController {
             console.log('likesInfo -->', comment.likesInfo)
             //if req.userId -> get likes by commentId and userId
             //else myStatus = none
-            let myStatus: string
+            let myStatus = 'None'
             if (req.user) {
                 const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
                 console.log('statusRes --> ', statusRes)
-                if (!statusRes) return res.sendStatus(404)
-                myStatus = statusRes
-            } else {
-                myStatus = 'None'
-            }
+                if (statusRes) {
+                    myStatus = statusRes
+                }
 
             //const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
             //if(!myStatus) return res.sendStatus(404)
@@ -98,7 +97,7 @@ class CommentsController {
             return res.sendStatus(404)
         }
     }
-}
+}}
 
 const commentsController = new CommentsController()
 
