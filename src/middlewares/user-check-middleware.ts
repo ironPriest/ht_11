@@ -5,18 +5,15 @@ import {resolveObjectURL} from "buffer";
 
 export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     console.log('headers -->', req.headers)
-    const auth = req.headers.authorization
-    if (!auth) {
+    try {
+        const auth = req.headers.authorization
+        const token = auth!.split(' ')[1]
+        const userId = await jwtUtility.getUserIdByToken(token)
+        req.user = await usersService.findById(userId)
         return next()
     }
-
-    const token = auth.split(' ')[1]
-
-    const userId = await jwtUtility.getUserIdByToken(token)
-    if (userId) {
-        req.user = await usersService.findById(userId)
-        next()
-    } else {
-        next()
+    catch (e) {
+        req.user = null
+        return next()
     }
 }
