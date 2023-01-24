@@ -5,16 +5,16 @@ import {usersService} from "../domain/users-service";
 export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     console.log('headers -->', req.headers)
     if (!req.headers.authorization) {
-        return next()
+        next()
     }
 
-    const token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization!.split(' ')[1]
 
     const userId = await jwtUtility.getUserIdByToken(token)
     if (userId) {
         req.user = await usersService.findById(userId)
-        return next()
+        next()
     } else {
-        return next()
+        next()
     }
 }
