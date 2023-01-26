@@ -5,6 +5,7 @@ class CommentsRepository {
     async create(newComment: CommentType): Promise<boolean> {
 
         const newCommentInstance = new CommentModelClass(newComment)
+        console.log('new comment in repo -->', newCommentInstance)
 
         await newCommentInstance.save()
 
