@@ -7,7 +7,7 @@ class CommentsRepository {
         const newCommentInstance = new CommentModelClass(newComment)
         console.log('new comment in repo -->', newCommentInstance)
 
-        await newCommentInstance.save()
+        await newCommentInstance.save().catch(err => console.log('saving comment in repo error -->', err))
 
         return true
     }
