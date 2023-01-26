@@ -62,8 +62,10 @@ export const UserModelClass = mongoose.model('users', UserSchema)
 const CommentSchema = new mongoose.Schema<CommentType>({
     id: {type: String, required: true},
     content: {type: String, required: true},
-    userId: {type: String, required: true},
-    userLogin: {type: String, required: true},
+    commentatorInfo: {
+        userId: {type: String, required: true},
+        userLogin: {type: String, required: true}
+    },
     createdAt: {type: Date, required: true},
     postId: {type: String, required: true},
     likesInfo: {

@@ -39,8 +39,10 @@ export class CommentType {
         public _id: ObjectId,
         public id: string,
         public content: string,
-        public userId: string,
-        public userLogin: string,
+        public commentatorInfo: {
+            userId: string,
+            userLogin: string
+        },
         public createdAt: Date,
         public postId: string,
         public likesInfo: {

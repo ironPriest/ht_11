@@ -64,17 +64,13 @@ class PostsController {
 
     async createComment(req: Request, res: Response) {
         const post = await postsService.getPostById(req.params.postId)
-        console.log('founded post -->', post)
         if (!post) {
-            console.log('-- post not found --')
             res.sendStatus(404)
         } else {
-            console.log('-- trying to create comment')
             const newComment = await commentsService.create(
                 req.body.content,
                 req.user!._id,
                 req.params.postId)
-            console.log('comment created -->', newComment)
             res.status(201).send(newComment)
         }
     }

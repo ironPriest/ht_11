@@ -33,7 +33,7 @@ class CommentsController {
     async updateComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
-            if (req.user!.id !== comment.userId) {
+            if (req.user!.id !== comment.commentatorInfo.userId) {
                 res.sendStatus(403)
             } else {
                 const isUpdated = await commentsService.updateComment(req.params.commentId, req.body.content)
@@ -52,7 +52,7 @@ class CommentsController {
     async deleteComment(req: Request, res: Response) {
         const comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
-            if (req.user!.id !== comment.userId) {
+            if (req.user!.id !== comment.commentatorInfo.userId) {
                 res.sendStatus(403)
             } else {
                 const isDeleted: boolean = await commentsService.delete(req.params.id)
@@ -68,19 +68,15 @@ class CommentsController {
     }
 
     async getComment(req: Request, res: Response) {
-        console.log('-- handler input --')
         let comment = await commentsService.getCommentById(req.params.commentId)
         if (comment) {
-            console.log('-- comment found --')
             comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
             comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
-            console.log('likesInfo -->', comment.likesInfo)
             //if req.userId -> get likes by commentId and userId
             //else myStatus = none
             let myStatus = 'None'
             if (req.user) {
                 const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
-                console.log('statusRes --> ', statusRes)
                 if (statusRes) {
                     myStatus = statusRes
                 }

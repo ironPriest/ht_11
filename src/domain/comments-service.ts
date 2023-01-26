@@ -7,11 +7,13 @@ import {v4} from "uuid";
 class CommentsService {
     async create(
         content: string,
-        userId: ObjectId,
+        commentatorId: ObjectId,
         postId: string
     ): Promise<Omit<CommentType, "_id" | "postId"> | null> {
-        const user: UserType | null = await usersRepository.findById(userId)
+        const user: UserType | null = await usersRepository.findById(commentatorId)
         //todo --> nested object creation syntax
+        let userId = user!.id
+        let userLogin = user!.login
         let likesCount: number = 0
         let dislikesCount: number = 0
         let myStatus: string = 'None'
@@ -19,8 +21,10 @@ class CommentsService {
             new ObjectId(),
             v4(),
             content,
-            user!.id,
-            user!.login,
+            {
+                userId,
+                userLogin
+            },
             new Date(),
             postId,
             {
@@ -36,8 +40,10 @@ class CommentsService {
         return {
             id: newComment.id,
             content: newComment.content,
-            userId: newComment.userId,
-            userLogin: newComment.userLogin,
+            commentatorInfo: {
+                userId: newComment.commentatorInfo.userId,
+                userLogin: newComment.commentatorInfo.userLogin
+            },
             createdAt: newComment.createdAt,
             likesInfo: newComment.likesInfo
         }
@@ -58,7 +64,7 @@ class CommentsService {
         )
     }
 
-    //TODO --> remove this
+    //todo --> remove this
     async updateLike(id: string, likeStatus: string): Promise<boolean> {
         return commentsRepository.updateLike(id, likeStatus)
     }
