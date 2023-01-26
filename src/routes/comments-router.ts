@@ -38,7 +38,7 @@ class CommentsController {
             } else {
                 const isUpdated = await commentsService.updateComment(req.params.commentId, req.body.content)
                 if (isUpdated) {
-                    const comment = await commentsService.getCommentById(req.params.commentId)
+                    //const comment = await commentsService.getCommentById(req.params.commentId)
                     res.sendStatus(204)
                 } else {
                     res.sendStatus(404)
@@ -68,15 +68,15 @@ class CommentsController {
     }
 
     async getComment(req: Request, res: Response) {
-        let comment = await commentsService.getCommentById(req.params.commentId)
+        let comment = await commentsService.getCommentById(req.params.id)
         if (comment) {
-            comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.commentId)
-            comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.commentId)
+            comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.id)
+            comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.id)
             //if req.userId -> get likes by commentId and userId
             //else myStatus = none
             let myStatus = 'None'
             if (req.user) {
-                const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+                const statusRes = await likesStatusesService.getMyStatus(req.user.id, req.params.id)
                 if (statusRes) {
                     myStatus = statusRes
                 }
@@ -116,7 +116,7 @@ commentsRouter
         commentsController.deleteComment
     )
     .get(
-        '/:commentId',
+        '/:id',
         userCheckMiddleware,
         commentsController.getComment
     )
