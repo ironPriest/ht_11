@@ -32,8 +32,9 @@ class PostsService {
         }
 
     }
-    async createPost(title: string, shortDescription: string, content: string, bloggerId: string): Promise<Omit<PostType, "_id"> | undefined> {
-        const createdPost = await postsRepository.createPost(title, shortDescription, content, bloggerId)
+    async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<Omit<PostType, "_id"> | null> {
+        const createdPost = await postsRepository.createPost(title, shortDescription, content, blogId)
+        console.log('created post in service -->', createdPost)
         if (createdPost) {
             return {
                 id: createdPost.id,
@@ -45,7 +46,7 @@ class PostsService {
                 createdAt: createdPost.createdAt
             }
         } else {
-            return
+            return null
         }
 
     }

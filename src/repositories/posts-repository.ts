@@ -49,8 +49,9 @@ class PostsRepository {
         shortDescription: string,
         content: string,
         blogId: string): Promise<PostType | null> {
-
-        let blogInstance = await BlogModelClass.findOne({id: blogId})
+        console.log('blogId to find blog in repo -->', blogId)
+        let blogInstance = await BlogModelClass.findOne({id: blogId}).lean()
+        console.log('find blog to create post repo-->', blogInstance)
         if (!blogInstance) return null
 
         // let newPost: PostType

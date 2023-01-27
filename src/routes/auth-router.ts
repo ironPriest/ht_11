@@ -86,6 +86,7 @@ authRouter.post('/login',
     async (req: Request, res: Response) => {
 
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
+
         if (!user) return res.sendStatus(401)
         const userId = user._id
 

@@ -1,0 +1,1363 @@
+{
+	"info": {
+		"_postman_id": "34dae397-e912-4efb-8aa4-6425e231c46f",
+		"name": "h/t#10",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20933886"
+	},
+	"item": [
+		{
+			"name": "bloggers",
+			"item": [
+				{
+					"name": "atlas",
+					"item": [
+						{
+							"name": "post_blogger",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"OlgaShmolga\",\r\n    \"youtubeUrl\": \"https://www.youtube.com/2/\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put_blogger",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"rew\",\r\n    \"youtubeUrl\": \"Jeugen's YouTube URL\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers/id",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_bloggers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers?PageNumber=1&PageSize=3",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers"
+									],
+									"query": [
+										{
+											"key": "PageNumber",
+											"value": "1"
+										},
+										{
+											"key": "PageSize",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_blogger",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers/id",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_blogger",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers/TueAug23202211:05:23GMT+0000(CoordinatedUniversalTime)",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers",
+										"TueAug23202211:05:23GMT+0000(CoordinatedUniversalTime)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bloggers_post",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/bloggers/id/posts",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"bloggers",
+										"id",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "blogs",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:5000/bloggers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post_bloggers_post_local",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"string\",\r\n  \"shortDescription\": \"string\",\r\n  \"content\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/bloggers/3d8e0516-6238-463b-8384-132e42f635c/posts",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers",
+										"3d8e0516-6238-463b-8384-132e42f635c",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put_blogger_local",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/bloggers/id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "blogs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/bloggers?PageNumber=1&PageSize=14",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"bloggers"
+									],
+									"query": [
+										{
+											"key": "PageNumber",
+											"value": "1"
+										},
+										{
+											"key": "PageSize",
+											"value": "14"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_blogger_local",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/bloggers/1657204682348",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers",
+										"1657204682348"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_bloggers_posts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/bloggers/1657290329933/posts?PageNumber=2&PageSize=2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers",
+										"1657290329933",
+										"posts"
+									],
+									"query": [
+										{
+											"key": "PageNumber",
+											"value": "2"
+										},
+										{
+											"key": "PageSize",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_blogger_local",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/bloggers/id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"bloggers",
+										"id"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "atlas",
+					"item": [
+						{
+							"name": "post_post",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"erer\",\r\n  \"shortDescription\": \"up to date\",\r\n  \"content\": \"blabla\",\r\n  \"bloggerId\": \"a5cd646c-0398-4681-ab0e-9bdcc7879148\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put_post",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"\",\r\n    \"shortDescription\": \"Jeugen's rubiks\",\r\n    \"content\": \"rtyrty\",\r\n    \"bloggerId\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts/id",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_posts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts?PageNumber=2&PageSize=2",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts"
+									],
+									"query": [
+										{
+											"key": "PageNumber",
+											"value": "2"
+										},
+										{
+											"key": "PageSize",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_post",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts/id",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_post",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts/id",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzBmMTVjMmI4YTgwOTZhMjkzZWEyMGIiLCJpYXQiOjE2NjE5MzMwMzB9.0TcIodIBqIOz-VzmoQmN5WRy9xOkPpBYY8Q4eUpNm1Y",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"content\": \"birthday\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts/0b781d92-4155-4025-ae19-79146a25/comments",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts",
+										"0b781d92-4155-4025-ae19-79146a25",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post_comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/posts/0b781d92-4155-4025-ae19-79146a25/comments",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"posts",
+										"0b781d92-4155-4025-ae19-79146a25",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "post_post_local",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"\",\r\n  \"shortDescription\": \"\",\r\n  \"content\": \"blabla\",\r\n  \"bloggerId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/posts",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "put_post_local",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/posts/id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_posts_local",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/posts?PageNumber=1&PageSize=18",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts"
+									],
+									"query": [
+										{
+											"key": "PageNumber",
+											"value": "1"
+										},
+										{
+											"key": "PageSize",
+											"value": "18"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get_post_local",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/posts/id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_post_local",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/posts/id",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts",
+										"id"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment_local",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzEwOGU4Nzc1MGVhZjkxMzhmYmMxNDgiLCJpYXQiOjE2NjIwMjk0Nzl9.eQZ8OjO_rJ0uWt8NsKeCVHcy4XsxMvD-8htVzRfNq9k",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"content\": \"stringstringstringst\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/posts/783303e3-9256-4fba-b756-47ea3b513cb7/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts",
+										"783303e3-9256-4fba-b756-47ea3b513cb7",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "post_comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/posts/783303e3-9256-4fba-b756-47ea3b513cb7/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"posts",
+										"783303e3-9256-4fba-b756-47ea3b513cb7",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "vercel",
+					"item": [
+						{
+							"name": "vercelUser",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"a_bit_ill\",\r\n    \"password\": \"headache\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_VERCEL_URL}}/users",
+									"host": [
+										"{{BASE_VERCEL_URL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "vercelUsers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_VERCEL_URL}}/users",
+									"host": [
+										"{{BASE_VERCEL_URL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "localUser",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "qwerty",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "admin",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"circus\",\r\n    \"password\": \"tigerArmy\",\r\n    \"email\": \"some1@email.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/users",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "localUsers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/users",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "vercel",
+					"item": [
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"hton\",\r\n    \"password\": \"SergeiOrlov\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/auth/login",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://bloggers-samurai.herokuapp.com/auth/registration",
+									"protocol": "https",
+									"host": [
+										"bloggers-samurai",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"auth",
+										"registration"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"login\": \"circus\",\r\n    \"password\": \"tigerArmy\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/login",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"ironp.riest.mih@gmail.com\",\r\n    \"message\": \"<h1>Hello guys</h1> <div><a href=\\\"https://it-incubator.ru\\\">click me</a></div>\",\r\n    \"subject\": \"nodemailer test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5000/auth/registration",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"auth",
+										"registration"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "refresh-token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/auth/refresh-token",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"refresh-token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Cookies",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/auth/logout",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration-email-resending",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/auth/registration-email-resending",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"registration-email-resending"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "recovery code",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/auth/password-recovery",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"auth",
+										"password-recovery"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "new password",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "comments",
+			"item": [
+				{
+					"name": "atlas",
+					"item": []
+				},
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "comment",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/comments/3d15a429-1336-487f-a59a-16211969ded2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"comments",
+										"3d15a429-1336-487f-a59a-16211969ded2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzEwOGU4Nzc1MGVhZjkxMzhmYmMxNDgiLCJpYXQiOjE2NjIwMjk0Nzl9.eQZ8OjO_rJ0uWt8NsKeCVHcy4XsxMvD-8htVzRfNq9k",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/comments/3d15a429-1336-487f-a59a-16211969ded2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"comments",
+										"3d15a429-1336-487f-a59a-16211969ded2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "security/devices",
+			"item": [
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "localSessions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/security/devices",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"security",
+										"devices"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete all except",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Cookie",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{BASE_URL}}/security/devices",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"security",
+										"devices"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "testing",
+			"item": [
+				{
+					"name": "local",
+					"item": [
+						{
+							"name": "all data",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BASE_URL}}/testing/all-data",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"testing",
+										"all-data"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
