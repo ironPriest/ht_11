@@ -82,19 +82,19 @@ class CommentsController {
                     myStatus = statusRes
                 }
 
-            //const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
-            //if(!myStatus) return res.sendStatus(404)
+                //const myStatus = await likesStatusesService.getMyStatus(req.user.id, req.params.commentId)
+                //if(!myStatus) return res.sendStatus(404)
+                // if (!req.headers.authorization) {
+                //     comment.likesInfo.myStatus = 'None'
+                //     return res.status(200).send(comment)
+                // }
+
+            }
             comment.likesInfo.myStatus = myStatus
-            // if (!req.headers.authorization) {
-            //     comment.likesInfo.myStatus = 'None'
-            //     return res.status(200).send(comment)
-            // }
             return res.status(200).send(comment)
-        } else {
-            return res.sendStatus(404)
-        }
+        } else return res.sendStatus(404)
     }
-}}
+}
 
 const commentsController = new CommentsController()
 
