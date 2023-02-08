@@ -1,5 +1,6 @@
 import {CommentType} from "../types/types";
 import {CommentModelClass} from "./db";
+import {likeStatusesRepository} from "./like-statuses-repository";
 
 class CommentsRepository {
     async create(newComment: CommentType): Promise<boolean> {
@@ -17,7 +18,8 @@ class CommentsRepository {
         pageNumber: number,
         pageSize: number,
         sortBy: string,
-        sortDirection: string
+        sortDirection: string,
+        userId: string | undefined
     ) {
         let totalCount = await CommentModelClass.count({postId})
         let pageCount = Math.ceil(+totalCount / pageSize)
@@ -31,14 +33,37 @@ class CommentsRepository {
                 break
         }
 
-        let query = CommentModelClass.find().where('postId').equals(postId).select('-_id -postId').sort(sortFilter).skip((pageNumber - 1) * pageSize).limit(pageSize)
+        let query = CommentModelClass.
+            find().
+            where('postId').equals(postId).
+            select('-_id -postId -__v').
+            sort(sortFilter).
+            skip((pageNumber - 1) * pageSize).
+            limit(pageSize)
+
+        let queryRes = await query
+
+        let mappedComments = Promise.all(queryRes.map(async  comment => {
+            comment.likesInfo.likesCount = await likeStatusesRepository.likesCount(comment.id)
+            comment.likesInfo.dislikesCount = await likeStatusesRepository.dislikesCount(comment.id)
+            comment.likesInfo.myStatus = "None"
+            if (userId) {
+                let likeStatus = await likeStatusesRepository.getLikeStatus(userId, comment.id)
+                if (!likeStatus) {
+                    comment.likesInfo.myStatus = "None"
+                } else {
+                    comment.likesInfo.myStatus = likeStatus.likeStatus
+                }
+            }
+
+        }))
 
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
-            "items": await query
+            "items": await mappedComments
         }
     }
 

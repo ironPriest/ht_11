@@ -54,13 +54,15 @@ class CommentsService {
         pageNumber: number,
         pageSize: number,
         sortBy: string,
-        sortDirection: string) {
+        sortDirection: string,
+        userId: string | undefined) {
         return await commentsRepository.findPostComments(
             postId,
             pageNumber,
             pageSize,
             sortBy,
-            sortDirection
+            sortDirection,
+            userId
         )
     }
 

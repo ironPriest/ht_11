@@ -69,7 +69,6 @@ class CommentsController {
 
     async getComment(req: Request, res: Response) {
         let comment = await commentsService.getCommentById(req.params.id)
-        console.log('comment -->', comment);
         if (comment) {
             comment.likesInfo.likesCount = await likesStatusesService.likesCount(req.params.id)
             comment.likesInfo.dislikesCount = await likesStatusesService.dislikesCount(req.params.id)

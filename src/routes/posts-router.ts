@@ -3,10 +3,12 @@ import {authMiddleware} from "../middlewares/auth-middleware";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
+import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {postsService} from "../domain/posts-service";
 import {commentsService} from "../domain/comments-service";
 import {blogsService} from "../domain/blogs-service";
 import {PostModelClass} from "../repositories/db";
+
 
 export const postsRouter = Router({})
 
@@ -57,7 +59,8 @@ class PostsController {
                 pageNumber,
                 pageSize,
                 sortBy,
-                sortDirection)
+                sortDirection,
+                req.user.id)
             res.status(200).send(comments)
         }
     }
@@ -152,6 +155,7 @@ const postsController = new PostsController()
 
 postsRouter.get(
     '/:postId/comments',
+    userCheckMiddleware,
     postsController.getPostComments
 )
 postsRouter.post(
