@@ -10,7 +10,7 @@ import {body} from "express-validator";
 export const commentsRouter = Router({})
 
 const likeValidation = body('likeStatus')
-    .exists({checkFalsy: true})
+    .exists({checkFalsy: true}).isIn(['None', 'Like', 'Dislike'])
 
 class CommentsController {
     async updateLike(req: Request, res: Response) {
