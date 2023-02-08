@@ -5,8 +5,12 @@ import {commentValidation} from "./posts-router";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {likesStatusesService} from "../domain/like-statuses-service";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
+import {body} from "express-validator";
 
 export const commentsRouter = Router({})
+
+const likeValidation = body('likeStatus')
+    .exists({checkFalsy: true})
 
 class CommentsController {
     async updateLike(req: Request, res: Response) {
@@ -101,6 +105,8 @@ commentsRouter
     .put(
         '/:commentId/like-status',
         bearerAuthMiddleware,
+        likeValidation,
+        inputValidationMiddleware,
         commentsController.updateLike
     )
     .put(
