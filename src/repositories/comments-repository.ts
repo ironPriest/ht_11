@@ -63,7 +63,7 @@ class CommentsRepository {
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
-            "items": await mappedComments
+            "items": mappedComments
         }
     }
 
