@@ -6,7 +6,7 @@ import {timeStampsRepository} from "../repositories/time-stamps-repository";
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const errorsHeap = errors.array(/*{onlyFirstError: true}*/).map(e => {
+        const errorsHeap = errors.array({onlyFirstError: true}).map(e => {
             return {
                 message: e.msg,
                 field: e.param
