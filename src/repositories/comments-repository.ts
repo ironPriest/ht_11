@@ -39,7 +39,7 @@ class CommentsRepository {
             select('-_id -postId -__v').
             sort(sortFilter).
             skip((pageNumber - 1) * pageSize).
-            limit(pageSize)
+            limit(pageSize).lean()
 
         let queryRes = await query
 
