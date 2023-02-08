@@ -33,7 +33,7 @@ class CommentsRepository {
                 break
         }
 
-        let query = CommentModelClass.
+        let query = await CommentModelClass.
             find().
             where('postId').equals(postId).
             select('-_id -postId -__v').
@@ -41,9 +41,8 @@ class CommentsRepository {
             skip((pageNumber - 1) * pageSize).
             limit(pageSize).lean()
 
-        let queryRes = await query
 
-        let mappedComments = Promise.all(queryRes.map(async  comment => {
+        let mappedComments = Promise.all(query.map(async  comment => {
             comment.likesInfo.likesCount = await likeStatusesRepository.likesCount(comment.id)
             comment.likesInfo.dislikesCount = await likeStatusesRepository.dislikesCount(comment.id)
             comment.likesInfo.myStatus = "None"
@@ -55,6 +54,8 @@ class CommentsRepository {
                     comment.likesInfo.myStatus = likeStatus.likeStatus
                 }
             }
+
+            return comment
 
         }))
 
