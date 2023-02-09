@@ -84,7 +84,6 @@ class BlogsController {
             req.body.shortDescription,
             req.body.content,
             req.params.blogId)
-        console.log('newPost in controller -->', newPost)
         if (!newPost) return res.sendStatus(400)
         res.status(201).send(newPost)
     }
