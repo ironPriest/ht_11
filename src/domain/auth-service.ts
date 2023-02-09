@@ -19,16 +19,16 @@ export const authService = {
             email,
             createdAt: new Date()
         }
-        const emailConformation: EmailConfirmationType = {
-            _id: new ObjectId(),
-            userId: user.id,
-            confirmationCode: v4(),
-            expirationDate: add(new Date(), {
+        const emailConformation = new EmailConfirmationType(
+            new ObjectId(),
+            user.id,
+            v4(),
+            add(new Date(), {
                 hours: 1,
                 minutes: 3
             }),
-            isConfirmed: false
-        }
+            false
+        )
         const creationResult = await usersRepository.create(user)
         const confirmationResult = await emailConfirmationRepository.create(emailConformation)
         if (!confirmationResult) return null

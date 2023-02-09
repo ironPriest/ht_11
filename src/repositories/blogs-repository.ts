@@ -51,15 +51,9 @@ class BlogsRepository {
     async createBlog(newBlog: BlogType): Promise<BlogType> {
 
         const newBlogInstance = new BlogModelClass(newBlog)
-        // newBlogInstance._id = newBlog._id
-        // newBlogInstance.id = newBlog.id
-        // newBlogInstance.name = newBlog.name
-        // newBlogInstance.websiteUrl = newBlog.websiteUrl
-        // newBlogInstance.description = newBlog.description
-        // newBlogInstance.createdAt = newBlog.createdAt
 
         await newBlogInstance.save()
-        //await BlogModelClass.create(newBlog)
+
         return newBlog
     }
     async updateBlog(blogId: string, name: string, websiteUrl: string): Promise<boolean> {

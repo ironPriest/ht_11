@@ -26,14 +26,6 @@ export class PostType {
     }
 }
 
-// export type UserType = WithId<{
-//     id: string
-//     login: string
-//     passwordHash: string
-//     email: string
-//     createdAt: Date
-// }>
-
 export class UserType {
     constructor(
         public _id: ObjectId,
@@ -65,12 +57,18 @@ export class CommentType {
     ) {
     }
 }
-export type EmailConfirmationType = WithId<{
-    userId: string
-    confirmationCode: string
-    expirationDate: Date
-    isConfirmed: boolean
-}>
+
+export class EmailConfirmationType {
+    constructor(
+        public _id: ObjectId,
+        public userId: string,
+        public confirmationCode: string,
+        public expirationDate: Date,
+        public isConfirmed: boolean
+    ) {
+    }
+}
+
 export type TokenType = WithId<{
     token: string
 }>
