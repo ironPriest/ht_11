@@ -26,40 +26,53 @@ const emailValidation = body('email')
     .isString()
     //.matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
-usersRouter.post('/',
+class UsersController {
+
+    async createUser(req: Request, res: Response) {
+        const newUser = await usersService.create(
+            req.body.login,
+            req.body.password,
+            req.body.email)
+        return res.status(201).send(newUser)
+    }
+
+    async getUsers(req: Request, res: Response) {
+        const pageNumber = req.query.pageNumber ? +req.query.pageNumber : 1
+        const pageSize = req.query.pageSize ? +req.query.pageSize : 10
+        const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
+        const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
+        const users = await usersService.getUsers(
+            req.query.searchLoginTerm?.toString(),
+            req.query.searchEmailTerm?.toString(),
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection)
+        return res.send(users)
+    }
+
+    async deleteUser(req: Request, res: Response) {
+        const isDeleted = await usersService.delete(req.params.id)
+        if (isDeleted) {
+            return res.sendStatus(204)
+        } else {
+            return res.sendStatus(404)
+        }
+    }
+}
+
+const usersController = new UsersController()
+
+usersRouter.post(
+    '/',
     authMiddleware,
     loginValidation,
     passwordValidation,
     emailValidation,
     inputValidationMiddleware,
-    async(req: Request, res: Response) => {
-    const newUser = await usersService.create(
-        req.body.login,
-        req.body.password,
-        req.body.email)
-    return res.status(201).send(newUser)
-})
+    usersController.createUser
+)
 
-usersRouter.get('/', async (req: Request, res: Response) => {
-    const pageNumber = req.query.pageNumber? +req.query.pageNumber: 1
-    const pageSize = req.query.pageSize? +req.query.pageSize: 10
-    const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
-    const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
-    const users = await usersService.getUsers(
-        req.query.searchLoginTerm?.toString(),
-        req.query.searchEmailTerm?.toString(),
-        pageNumber,
-        pageSize,
-        sortBy,
-        sortDirection)
-    return res.send(users)
-})
+usersRouter.get('/', usersController.getUsers)
 
-usersRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
-    const isDeleted = await usersService.delete(req.params.id)
-    if (isDeleted) {
-        return res.sendStatus(204)
-    } else {
-        return res.sendStatus(404)
-    }
-})
+usersRouter.delete('/:id', authMiddleware, usersController.deleteUser)

@@ -26,13 +26,25 @@ export class PostType {
     }
 }
 
-export type UserType = WithId<{
-    id: string
-    login: string
-    passwordHash: string
-    email: string
-    createdAt: Date
-}>
+// export type UserType = WithId<{
+//     id: string
+//     login: string
+//     passwordHash: string
+//     email: string
+//     createdAt: Date
+// }>
+
+export class UserType {
+    constructor(
+        public _id: ObjectId,
+        public id: string,
+        public login: string,
+        public passwordHash: string,
+        public email: string,
+        public createdAt: Date
+    ) {
+    }
+}
 
 export class CommentType {
     constructor(
