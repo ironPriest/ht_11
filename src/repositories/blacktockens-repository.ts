@@ -1,31 +1,20 @@
 import {TokenType} from "../types/types";
 import {BlackTokenModelClass} from "./db";
 
-
-export const blackTokensRepository = {
+class BlacktokensRepository {
     async addToList(token: TokenType): Promise<boolean> {
-        // let res = await BlackTokenModelClass.insertOne(token)
-        // return res.acknowledged
-
         const newBlackTokenInstance = new BlackTokenModelClass(token)
-        // newBlackTokenInstance._id = token._id
-        // newBlackTokenInstance.token = token.token
-
         await newBlackTokenInstance.save()
-
         return true
-    },
-    async check(token: string): Promise<TokenType | null> {
-        // let res = await BlackTokenModelClass.findOne({token})
-        // if (res) {
-        //     return res
-        // } else {
-        //     return null
-        // }
+    }
 
+    async check(token: string): Promise<TokenType | null> {
         return BlackTokenModelClass.findOne({token}).lean()
-    },
+    }
+
     async deleteAll() {
         await BlackTokenModelClass.deleteMany({})
     }
 }
+
+export const blackTokensRepository = new BlacktokensRepository()

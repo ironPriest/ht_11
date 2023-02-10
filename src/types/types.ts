@@ -69,9 +69,14 @@ export class EmailConfirmationType {
     }
 }
 
-export type TokenType = WithId<{
-    token: string
-}>
+export class TokenType {
+    constructor(
+        public _id: ObjectId,
+        public token: string
+    ) {
+    }
+}
+
 export type DeviceAuthSessionType = WithId<{
     lastActiveDate: Date
     deviceId: string

@@ -1,4 +1,4 @@
-import {UserType} from "../types/types";
+import {TokenType, UserType} from "../types/types";
 import jwt from 'jsonwebtoken'
 import {settings} from "../types/settings";
 import {ObjectId} from "mongodb";
@@ -29,10 +29,12 @@ export const jwtUtility = {
         }
     },
     async addToBlackList(corruptedToken: string) {
-        let token = {
-            _id: new ObjectId(),
-            token: corruptedToken
-        }
+
+        let token = new TokenType(
+            new ObjectId(),
+            corruptedToken
+        )
+
         return blackTokensRepository.addToList(token)
     }
 }
