@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const emailAdapter = {
+class EmailAdapter {
     async sendEmail(email: string, subject: string, code: string) {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -14,7 +14,7 @@ export const emailAdapter = {
         //create customizable html
         let html = '<h1>Thank for your registration</h1>\n' +
             '<p>To finish registration please follow the link below:\n' +
-                '<a href=\'https://somesite.com/confirm-email?code=' + code + '\'>complete registration</a>\n' +
+            '<a href=\'https://somesite.com/confirm-email?code=' + code + '\'>complete registration</a>\n' +
             '</p>'
 
         // send mail with defined transport object
@@ -25,7 +25,7 @@ export const emailAdapter = {
             html: html// html body
         });
         return info
-    },
+    }
     async passwordRecovery(email: string, subject: string, code: string) {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -38,9 +38,9 @@ export const emailAdapter = {
 
         //create customizable html
         let html = '<h1>Password recovery</h1>' +
-        '<p>To finish password recovery please follow the link below:' +
+            '<p>To finish password recovery please follow the link below:' +
             '<a href=\'https://somesite.com/password-recovery?recoveryCode=' + code + '\'>recovery password</a>\n' +
-        '</p>'
+            '</p>'
 
         // send mail with defined transport object
         let info = await transporter.sendMail({
@@ -52,3 +52,5 @@ export const emailAdapter = {
         return info
     }
 }
+
+export const emailAdapter = new EmailAdapter()
