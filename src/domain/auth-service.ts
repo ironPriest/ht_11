@@ -8,7 +8,7 @@ import {emailConfirmationRepository} from "../repositories/emailconfirmation-rep
 import {emailService} from "./email-service";
 import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
-export const authService = {
+class AuthService {
     async createUser(login: string, password: string, email: string) {
         const passwordHash = await this._generateHash(password)
         const user: UserType = {
@@ -37,13 +37,13 @@ export const authService = {
             'subject',
             emailConformation.confirmationCode)
         return creationResult
-    },
+    }
     async confirm(code: string) {
         let confirmation = await emailConfirmationRepository.findByCode(code)
         if (confirmation) {
             await emailConfirmationRepository.updateStatus(confirmation.userId)
         }
-    },
+    }
     async confirmationResend(email: string) {
         let user: UserType | null = await usersRepository.findByEmail(email)
         if (user) {
@@ -55,7 +55,7 @@ export const authService = {
             return null
         }
 
-    },
+    }
     async passwordRecovery(email: string) {
         let recoveryCode = v4()
         const recoveryCodeEntity = new RecoveryCodeType(
@@ -65,14 +65,14 @@ export const authService = {
         )
         await recoveryCodesRepository.create(recoveryCodeEntity)
         await emailService.passwordRecovery(email, 'password recovery', recoveryCode)
-    },
+    }
     async newPassword(userId: string, newPassword: string) {
         const newPasswordHash = await this._generateHash(newPassword)
         return await usersRepository.newPassword(userId, newPasswordHash)
-    },
+    }
     async _generateHash(password: string) {
         return await bcrypt.hash(password, 10)
-    },
+    }
 
     async checkCredentials(loginOrEmail: string, password: string) {
 
@@ -83,6 +83,7 @@ export const authService = {
         if (!result) return null
 
         return user
-    },
-
+    }
 }
+
+export const authService = new AuthService()
