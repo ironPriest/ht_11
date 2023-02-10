@@ -1,5 +1,8 @@
 import {PostType} from "../types/types";
 import {postsRepository} from "../repositories/posts-repository";
+import {v4} from "uuid";
+import {ObjectId} from "mongodb";
+import {blogsRepository} from "../repositories/blogs-repository";
 
 class PostsService {
     async getPosts(
@@ -33,8 +36,23 @@ class PostsService {
 
     }
     async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<Omit<PostType, "_id"> | null> {
-        const createdPost = await postsRepository.createPost(title, shortDescription, content, blogId)
-        console.log('created post in service -->', createdPost)
+
+        const blog = await blogsRepository.getBlogById(blogId)
+        if (!blog) return null
+
+        const post = new PostType(
+            new ObjectId(),
+            v4(),
+            title,
+            shortDescription,
+            content,
+            blogId,
+            blog.name,
+            new Date().toISOString()
+        )
+
+        const createdPost = await postsRepository.createPost(post)
+
         if (createdPost) {
             return {
                 id: createdPost.id,

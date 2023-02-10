@@ -21,7 +21,7 @@ export class PostType {
         public content: string,
         public blogId: string,
         public blogName: string,
-        public createdAt: Date
+        public createdAt: string
     ) {
     }
 }

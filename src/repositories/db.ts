@@ -46,7 +46,7 @@ const PostSchema = new mongoose.Schema<PostType>({
     content: {type: String, required: true},
     blogId: {type: String, required: true},
     blogName: {type: String, required: true},
-    createdAt: {type: Date, required: true},
+    createdAt: {type: String, required: true},
 })
 export const PostModelClass = mongoose.model('posts', PostSchema)
 

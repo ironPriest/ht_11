@@ -44,41 +44,14 @@ class PostsRepository {
     async getPostById(postId: string): Promise<PostType | null> {
         return PostModelClass.findOne({id: postId}).lean()
     }
-    async createPost(
-        title: string,
-        shortDescription: string,
-        content: string,
-        blogId: string): Promise<PostType | null> {
-        console.log('blogId to find blog in repo -->', blogId)
-        let blogInstance = await BlogModelClass.findOne({id: blogId}).lean()
-        console.log('find blog to create post repo-->', blogInstance)
-        if (!blogInstance) return null
+    async createPost(post: PostType): Promise<PostType | null> {
 
-        // let newPost: PostType
-        // await PostModelClass.create( newPost = {
-        //         _id: new ObjectId(),
-        //         id: v4(),
-        //         title: title,
-        //         shortDescription: shortDescription,
-        //         content: content,
-        //         blogId: blogId,
-        //         bloggerName: blogger?.name,
-        //         createdAt: new Date()
-        // })
-
-        const newPostInstance = new PostModelClass()
-        newPostInstance._id = new ObjectId()
-        newPostInstance.id = v4()
-        newPostInstance.title = title
-        newPostInstance.shortDescription = shortDescription
-        newPostInstance.content = content
-        newPostInstance.blogId = blogId
-        newPostInstance.blogName = blogInstance.name
-        newPostInstance.createdAt = new Date()
+        const newPostInstance = new PostModelClass(post)
 
         await newPostInstance.save()
 
         return newPostInstance
+
     }
     async updatePost(
         postId: string,
