@@ -1,4 +1,4 @@
-import {ObjectId, WithId} from 'mongodb'
+import {ObjectId} from 'mongodb'
 
 export class BlogType {
     constructor(
@@ -100,10 +100,15 @@ export class TimeStampType {
     }
 }
 
-export type RecoveryCodeType = WithId<{
-    email: string
-    recoveryCode: string
-}>
+export class RecoveryCodeType {
+    constructor(
+        public _id: ObjectId,
+        public email: string,
+        public recoveryCode: string
+    ) {
+    }
+}
+
 export class LikeStatus {
     constructor(
         public _id: ObjectId,

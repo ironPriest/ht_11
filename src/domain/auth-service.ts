@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import {usersRepository} from "../repositories/users-repository";
-import {EmailConfirmationType, UserType} from "../types/types";
+import {EmailConfirmationType, RecoveryCodeType, UserType} from "../types/types";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 import add from "date-fns/add"
@@ -58,11 +58,12 @@ export const authService = {
     },
     async passwordRecovery(email: string) {
         let recoveryCode = v4()
-        await recoveryCodesRepository.create({
-            _id: new ObjectId(),
+        const recoveryCodeEntity = new RecoveryCodeType(
+            new ObjectId(),
             email,
             recoveryCode
-        })
+        )
+        await recoveryCodesRepository.create(recoveryCodeEntity)
         await emailService.passwordRecovery(email, 'password recovery', recoveryCode)
     },
     async newPassword(userId: string, newPassword: string) {
