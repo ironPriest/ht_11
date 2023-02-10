@@ -8,13 +8,6 @@ class UsersRepository {
 
         const newUserInstance = new UserModelClass(newUser)
 
-        // newUserInstance._id = newUser._id
-        // newUserInstance.id = newUser.id
-        // newUserInstance.login = newUser.login
-        // newUserInstance.passwordHash = newUser.passwordHash
-        // newUserInstance.email = newUser.email
-        // newUserInstance.createdAt = newUser.createdAt
-
         await newUserInstance.save()
 
         return newUser

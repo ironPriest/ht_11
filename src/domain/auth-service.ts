@@ -11,14 +11,16 @@ import {recoveryCodesRepository} from "../repositories/recovery-codes-repository
 class AuthService {
     async createUser(login: string, password: string, email: string) {
         const passwordHash = await this._generateHash(password)
-        const user: UserType = {
-            _id: new ObjectId(),
-            id: v4(),
+
+        const user = new UserType(
+            new ObjectId(),
+            v4(),
             login,
             passwordHash,
             email,
-            createdAt: new Date()
-        }
+            new Date()
+        )
+
         const emailConformation = new EmailConfirmationType(
             new ObjectId(),
             user.id,
