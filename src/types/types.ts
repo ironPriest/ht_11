@@ -90,11 +90,16 @@ export class DeviceAuthSessionType {
     }
 }
 
-export type TimeStampType = WithId<{
-    route: string
-    ip: string
-    timeStamp: Date
-}>
+export class TimeStampType {
+    constructor(
+        public _id: ObjectId,
+        public route: string,
+        public ip: string,
+        public timeStamp: Date
+    ) {
+    }
+}
+
 export type RecoveryCodeType = WithId<{
     email: string
     recoveryCode: string

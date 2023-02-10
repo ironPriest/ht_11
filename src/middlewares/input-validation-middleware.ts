@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {ObjectId} from "mongodb";
 import {validationResult} from "express-validator";
 import {timeStampsRepository} from "../repositories/time-stamps-repository";
+import {TimeStampType} from "../types/types";
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -40,12 +41,13 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
 
 export  const rateLimiter = async (req: Request, res: Response, next: NextFunction) => {
 
-    const timeStamp = {
-        _id: new ObjectId(),
-        route: req.route.path,
-        ip: req.ip,
-        timeStamp: new Date()
-    }
+    const timeStamp = new TimeStampType(
+        new ObjectId(),
+        req.route.path,
+        req.ip,
+        new Date()
+    )
+
     //TODO check result
     await timeStampsRepository.add(timeStamp)
     //TODO check result
