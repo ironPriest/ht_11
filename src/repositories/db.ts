@@ -90,7 +90,7 @@ const BlackTokenSchema = new mongoose.Schema<TokenType>({
 export const BlackTokenModelClass = mongoose.model('blackTokens', BlackTokenSchema)
 
 const DeviceAuthSessionSchema = new mongoose.Schema<DeviceAuthSessionType>({
-    lastActiveDate: {type: Date, required: true},
+    lastActiveDate: {type: String, required: true},
     deviceId: {type: String, required: true},
     ip: {type: String, required: true},
     title: {type: String, required: true},

@@ -77,14 +77,19 @@ export class TokenType {
     }
 }
 
-export type DeviceAuthSessionType = WithId<{
-    lastActiveDate: Date
-    deviceId: string
-    ip: string
-    title: string
-    userId: ObjectId
-    rtExpDate: Date
-}>
+export class DeviceAuthSessionType {
+    constructor(
+        public _id: ObjectId,
+        public lastActiveDate: string,
+        public deviceId: string,
+        public ip: string,
+        public title: string,
+        public userId: ObjectId,
+        public rtExpDate: Date
+    ) {
+    }
+}
+
 export type TimeStampType = WithId<{
     route: string
     ip: string
