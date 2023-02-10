@@ -1,6 +1,4 @@
 import {Request, Response, Router} from "express";
-import {commentsRouter} from "./comments-router";
-import {blogsService} from "../domain/blogs-service";
 import {blogsRepository} from "../repositories/blogs-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {usersRepository} from "../repositories/users-repository";
@@ -14,17 +12,29 @@ import {likeStatusesRepository} from "../repositories/like-statuses-repository";
 
 export const testingRouter = Router({})
 
-testingRouter.delete('/all-data', async (req: Request, res: Response) => {
-    await blogsRepository.deleteAll()
-    await postsRepository.deleteAll()
-    await usersRepository.deleteAll()
-    await commentsRepository.deleteAll()
-    await emailConfirmationRepository.deleteAll()
-    await blackTokensRepository.deleteAll()
-    await deviceAuthSessionsRepository.deleteAll()
-    await timeStampsRepository.deleteAll()
-    await recoveryCodesRepository.deleteAll()
-    await likeStatusesRepository.deleteAll()
+class TestingController {
 
-    res.sendStatus(204)
-})
+    async delete(req: Request, res: Response) {
+
+        await blogsRepository.deleteAll()
+        await postsRepository.deleteAll()
+        await usersRepository.deleteAll()
+        await commentsRepository.deleteAll()
+        await emailConfirmationRepository.deleteAll()
+        await blackTokensRepository.deleteAll()
+        await deviceAuthSessionsRepository.deleteAll()
+        await timeStampsRepository.deleteAll()
+        await recoveryCodesRepository.deleteAll()
+        await likeStatusesRepository.deleteAll()
+
+        res.sendStatus(204)
+    }
+
+}
+
+const testingController = new TestingController()
+
+testingRouter.delete(
+    '/all-data',
+    testingController.delete
+)
