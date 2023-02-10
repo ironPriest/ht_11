@@ -4,14 +4,11 @@ import {authService} from "./auth-service";
 import {v4} from "uuid";
 import {UserType} from "../types/types";
 
-// import {randomUUID} from "crypto";
-// const uuidExample = randomUUID()
-
-export const usersService = {
+class UsersService {
     async create(
-            login: string,
-            password: string,
-            email: string) {
+        login: string,
+        password: string,
+        email: string) {
         const passwordHash = await authService._generateHash(password)
         let user = new UserType(
             new ObjectId(),
@@ -31,7 +28,7 @@ export const usersService = {
             email: user.email,
             createdAt: user.createdAt
         }
-    },
+    }
     async findById(userId: any) {
         let user = await usersRepository.findById(userId)
         if (user) {
@@ -39,7 +36,7 @@ export const usersService = {
         } else {
             return null
         }
-    },
+    }
     async findByLoginOrEmail(loginOrEmail: string) {
         let user = await usersRepository.findByLoginOrEmail(loginOrEmail)
         if (user) {
@@ -47,7 +44,7 @@ export const usersService = {
         } else {
             return null
         }
-    },
+    }
     async findByEmail(email: string) {
         let user = await usersRepository.findByEmail(email)
         if (user) {
@@ -55,14 +52,14 @@ export const usersService = {
         } else {
             return null
         }
-    },
+    }
     async getUsers(
-            searchLoginTerm: string | undefined,
-            searchEmailTerm: string | undefined,
-            pageNumber: number,
-            pageSize: number,
-            sortBy: string,
-            sortDirection: string) {
+        searchLoginTerm: string | undefined,
+        searchEmailTerm: string | undefined,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
         return await usersRepository.getUsers(
             searchLoginTerm,
             searchEmailTerm,
@@ -70,8 +67,10 @@ export const usersService = {
             pageSize,
             sortBy,
             sortDirection)
-    },
+    }
     async delete(id: string) {
         return usersRepository.delete(id)
     }
 }
+
+export const usersService = new UsersService()
