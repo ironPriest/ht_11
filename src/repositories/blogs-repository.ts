@@ -1,7 +1,7 @@
 import {BlogType} from "../types/types";
 import {BlogModelClass} from "./db";
 
-class BlogsRepository {
+export class BlogsRepository {
     async getBlogs(
         searchTerm: string | undefined,
         pageNumber: number,
@@ -83,5 +83,3 @@ class BlogsRepository {
         await BlogModelClass.deleteMany()
     }
 }
-
-export const blogsRepository = new BlogsRepository()

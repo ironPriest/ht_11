@@ -1,24 +1,31 @@
 import {BlogType} from "../types/types";
 import {ObjectId} from "mongodb";
-import {blogsRepository} from "../repositories/blogs-repository"
+import {BlogsRepository} from "../repositories/blogs-repository"
 import {v4} from 'uuid';
 
-class BlogsService {
+export class BlogsService {
+
+    blogsRepository: BlogsRepository
+    constructor() {
+        this.blogsRepository = new BlogsRepository()
+    }
+
     async getBlogs(
         searchTerm: string | undefined,
         pageNumber: number,
         pageSize: number,
         sortBy: string,
         sortDirection: string) {
-        return await blogsRepository.getBlogs(
+        return await this.blogsRepository.getBlogs(
             searchTerm,
             pageNumber,
             pageSize,
             sortBy,
             sortDirection)
     }
+
     async getBlogById(bloggerId: string): Promise<Omit<BlogType, '_id'> | null> {
-        let blogger: BlogType | null | void = await blogsRepository.getBlogById(bloggerId)
+        let blogger: BlogType | null | void = await this.blogsRepository.getBlogById(bloggerId)
         if (blogger) {
             return {
                 id: blogger.id,
@@ -32,6 +39,7 @@ class BlogsService {
         }
 
     }
+
     async createBlog(name: string, websiteUrl: string, description: string): Promise<Omit<BlogType, "_id">> {
 
         let newBlog = new BlogType(
@@ -42,7 +50,7 @@ class BlogsService {
             description,
             new Date()
         )
-        const createdBlog = await blogsRepository.createBlog(newBlog)
+        const createdBlog = await this.blogsRepository.createBlog(newBlog)
         return {
             id: createdBlog.id,
             name: createdBlog.name,
@@ -51,12 +59,13 @@ class BlogsService {
             description: createdBlog.description
         }
     }
-    async updateBlog(blogId: string, name: string, websiteUrl: string): Promise<boolean> {
-        return blogsRepository.updateBlog(blogId, name, websiteUrl)
-    }
-    async deleteBlog(blogId: string): Promise<boolean> {
-        return blogsRepository.deleteBlog(blogId)
-    }
-}
 
-export const blogsService = new BlogsService()
+    async updateBlog(blogId: string, name: string, websiteUrl: string): Promise<boolean> {
+        return this.blogsRepository.updateBlog(blogId, name, websiteUrl)
+    }
+
+    async deleteBlog(blogId: string): Promise<boolean> {
+        return this.blogsRepository.deleteBlog(blogId)
+    }
+
+}

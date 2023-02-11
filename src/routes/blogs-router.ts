@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {blogsService} from "../domain/blogs-service";
+import {BlogsService} from "../domain/blogs-service";
 import {body, param} from "express-validator";
 import {
     inputValidationMiddleware,
@@ -29,6 +29,8 @@ const youtubeUrlValidation = body('websiteUrl')
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
+    //todo how it's better to deal with blogService instance
+    let blogsService = new BlogsService()
     const blog = await blogsService.getBlogById(blogId)
     if (!blog) {
         throw new Error('such blog doesnt exist')
@@ -37,12 +39,18 @@ const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
 })
 
 class BlogsController {
+
+    private blogsService: BlogsService
+    constructor() {
+        this.blogsService = new BlogsService()
+    }
+
     async getBlogs(req: Request, res: Response) {
         const pageNumber = req.query.pageNumber ? +req.query.pageNumber : 1
         const pageSize = req.query.pageSize ? +req.query.pageSize : 10
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
         const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-        const blogs = await blogsService.getBlogs(
+        const blogs = await this.blogsService.getBlogs(
             req.query.searchNameTerm?.toString(),
             pageNumber,
             pageSize,
@@ -52,7 +60,7 @@ class BlogsController {
     }
 
     async createBlog(req: Request, res: Response) {
-        const newBlogger = await blogsService.createBlog(
+        const newBlogger = await this.blogsService.createBlog(
             req.body.name,
             req.body.websiteUrl,
             req.body.description)
@@ -60,7 +68,7 @@ class BlogsController {
     }
 
     async getBlogPosts(req: Request, res: Response) {
-        let blog = await blogsService.getBlogById(req.params.blogId)
+        let blog = await this.blogsService.getBlogById(req.params.blogId)
         if (blog) {
             const pageNumber = req.query.pageNumber ? +req.query.pageNumber : 1
             const pageSize = req.query.pageSize ? +req.query.pageSize : 10
@@ -89,7 +97,7 @@ class BlogsController {
     }
 
     async getBlog(req: Request, res: Response) {
-        let blog = await blogsService.getBlogById(req.params.bloggerId)
+        let blog = await this.blogsService.getBlogById(req.params.bloggerId)
         if (blog) {
             res.send(blog)
         } else {
@@ -98,12 +106,12 @@ class BlogsController {
     }
 
     async updateBlog(req: Request, res: Response) {
-        const isUpdated: boolean = await blogsService.updateBlog(
+        const isUpdated: boolean = await this.blogsService.updateBlog(
             req.params.blogId,
             req.body.name,
             req.body.youtubeUrl)
         if (isUpdated) {
-            const blog = await blogsService.getBlogById(req.params.blogId)
+            const blog = await this.blogsService.getBlogById(req.params.blogId)
             res.status(204).send(blog)
         } else {
             res.send(404)
@@ -111,7 +119,7 @@ class BlogsController {
     }
 
     async deleteBlog(req: Request, res: Response) {
-        const isDeleted: boolean = await blogsService.deleteBlog(req.params.blogId)
+        const isDeleted: boolean = await this.blogsService.deleteBlog(req.params.blogId)
         if (isDeleted) {
             res.send(204)
         } else {
@@ -124,7 +132,7 @@ const blogsController = new BlogsController()
 
 blogsRouter.get(
     '/',
-    blogsController.getBlogs
+    blogsController.getBlogs.bind(blogsController)
 )
 blogsRouter.post(
     '/',
@@ -132,13 +140,13 @@ blogsRouter.post(
     nameValidation,
     youtubeUrlValidation,
     inputValidationMiddleware,
-    blogsController.createBlog
+    blogsController.createBlog.bind(blogsController)
 )
 blogsRouter.get(
     '/:blogId/posts',
     bloggerIdValidation,
     inputValidationMiddleware,
-    blogsController.getBlogPosts
+    blogsController.getBlogPosts.bind(blogsController)
 )
 blogsRouter.post(
     '/:blogId/posts',
@@ -148,11 +156,11 @@ blogsRouter.post(
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,
-    blogsController.createBlogPost
+    blogsController.createBlogPost.bind(blogsController)
 )
 blogsRouter.get(
     '/:blogId',
-    blogsController.getBlog
+    blogsController.getBlog.bind(blogsController)
 )
 blogsRouter.put(
     '/:blogId',
@@ -160,10 +168,10 @@ blogsRouter.put(
     youtubeUrlValidation,
     nameValidation,
     inputValidationMiddleware,
-    blogsController.updateBlog
+    blogsController.updateBlog.bind(blogsController)
 )
 blogsRouter.delete(
     '/:blogId',
     authMiddleware,
-    blogsController.deleteBlog
+    blogsController.deleteBlog.bind(blogsController)
 )
