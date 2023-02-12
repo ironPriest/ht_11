@@ -2,9 +2,15 @@ import {PostType} from "../types/types";
 import {postsRepository} from "../repositories/posts-repository";
 import {v4} from "uuid";
 import {ObjectId} from "mongodb";
-import {blogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepository} from "../repositories/blogs-repository";
 
 class PostsService {
+
+    blogsRepository: BlogsRepository;
+    constructor() {
+        this.blogsRepository = new BlogsRepository()
+    }
+
     async getPosts(
         blogId: string | null,
         pageNumber: number,
@@ -18,6 +24,7 @@ class PostsService {
             sortBy,
             sortDirection)
     }
+
     async getPostById(postId: string): Promise<Omit<PostType, '_id'> | null> {
         let post: PostType | null = await postsRepository.getPostById(postId)
         if (post) {
@@ -35,9 +42,10 @@ class PostsService {
         }
 
     }
+
     async createPost(title: string, shortDescription: string, content: string, blogId: string): Promise<Omit<PostType, "_id"> | null> {
 
-        const blog = await blogsRepository.getBlogById(blogId)
+        const blog = await this.blogsRepository.getBlogById(blogId)
         if (!blog) return null
 
         const post = new PostType(
@@ -68,12 +76,15 @@ class PostsService {
         }
 
     }
+
     async updatePost(postId: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
         return postsRepository.updatePost(postId, title, shortDescription, content, blogId)
     }
+
     async deletePost(postId: string): Promise<boolean> {
         return postsRepository.deletePost(postId)
     }
+
 }
 
 export const postsService = new PostsService()

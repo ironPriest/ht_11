@@ -6,7 +6,7 @@ import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {postsService} from "../domain/posts-service";
 import {commentsService} from "../domain/comments-service";
-import {blogsService} from "../domain/blogs-service";
+import {BlogsService} from "../domain/blogs-service";
 import {PostModelClass} from "../repositories/db";
 
 
@@ -30,6 +30,8 @@ export const contentValidation = body('content')
 export const blogIdValidation = body('blogId')
     .exists({checkFalsy: true})
     .custom(async (blogId, ) => {
+        //todo how it's better to deal with blogService instance postRouter
+        let blogsService = new BlogsService()
         const blogger = await blogsService.getBlogById(blogId)
 
         if (!blogger) {
@@ -45,6 +47,7 @@ export const commentValidation = body('content')
     .isLength({max: 300})
 
 class PostsController {
+
     async getPostComments(req: Request, res: Response) {
         const post = await postsService.getPostById(req.params.postId)
         if (!post) {

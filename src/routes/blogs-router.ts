@@ -29,7 +29,7 @@ const youtubeUrlValidation = body('websiteUrl')
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
-    //todo how it's better to deal with blogService instance
+    //todo how it's better to deal with blogService instance blogRouter
     let blogsService = new BlogsService()
     const blog = await blogsService.getBlogById(blogId)
     if (!blog) {

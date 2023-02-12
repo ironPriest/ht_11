@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {blogsRepository} from "../repositories/blogs-repository";
+import {BlogsRepository} from "../repositories/blogs-repository";
 import {postsRepository} from "../repositories/posts-repository";
 import {usersRepository} from "../repositories/users-repository";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
@@ -14,9 +14,14 @@ export const testingRouter = Router({})
 
 class TestingController {
 
+    private blogsRepository: BlogsRepository;
+    constructor() {
+        this.blogsRepository = new BlogsRepository()
+    }
+
     async delete(req: Request, res: Response) {
 
-        await blogsRepository.deleteAll()
+        await this.blogsRepository.deleteAll()
         await postsRepository.deleteAll()
         await usersRepository.deleteAll()
         await commentsRepository.deleteAll()
@@ -36,5 +41,5 @@ const testingController = new TestingController()
 
 testingRouter.delete(
     '/all-data',
-    testingController.delete
+    testingController.delete.bind(testingController)
 )
