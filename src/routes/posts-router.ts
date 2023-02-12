@@ -4,7 +4,7 @@ import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
-import {postsService} from "../domain/posts-service";
+import {PostsService} from "../domain/posts-service";
 import {commentsService} from "../domain/comments-service";
 import {BlogsService} from "../domain/blogs-service";
 import {PostModelClass} from "../repositories/db";
@@ -48,8 +48,13 @@ export const commentValidation = body('content')
 
 class PostsController {
 
+    private postsService: PostsService
+    constructor() {
+        this.postsService = new PostsService()
+    }
+
     async getPostComments(req: Request, res: Response) {
-        const post = await postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.params.postId)
         if (!post) {
             res.sendStatus(404)
         } else {
@@ -69,7 +74,7 @@ class PostsController {
     }
 
     async createComment(req: Request, res: Response) {
-        const post = await postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.params.postId)
         if (!post) {
             res.sendStatus(404)
         } else {
@@ -86,7 +91,7 @@ class PostsController {
         const pageSize = req.query.pageSize ? +req.query.pageSize : 10
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
         const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-        const posts = await postsService.getPosts(
+        const posts = await this.postsService.getPosts(
             null,
             pageNumber,
             pageSize,
@@ -96,7 +101,7 @@ class PostsController {
     }
 
     async createPost(req: Request, res: Response) {
-        const newPost = await postsService.createPost(
+        const newPost = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,
@@ -115,7 +120,7 @@ class PostsController {
     }
 
     async getPost(req: Request, res: Response) {
-        const post = await postsService.getPostById(req.params.postId)
+        const post = await this.postsService.getPostById(req.params.postId)
         if (post) {
             res.send(post)
         } else {
@@ -128,7 +133,7 @@ class PostsController {
         const postInstance = await PostModelClass.findOne({id: req.params.postId})
         if (!postInstance) return res.sendStatus(404)
 
-        const updatedPostInstance = await postsService.updatePost(
+        const updatedPostInstance = await this.postsService.updatePost(
             req.params.postId,
             req.body.title,
             req.body.shortDescription,
@@ -142,13 +147,14 @@ class PostsController {
     }
 
     async deletePost(req: Request, res: Response) {
-        const isDeleted: boolean = await postsService.deletePost(req.params.postId)
+        const isDeleted: boolean = await this.postsService.deletePost(req.params.postId)
         if (isDeleted) {
             res.send(204)
         } else {
             res.send(404)
         }
     }
+
 }
 
 const postsController = new PostsController()
@@ -156,18 +162,18 @@ const postsController = new PostsController()
 postsRouter.get(
     '/:postId/comments',
     userCheckMiddleware,
-    postsController.getPostComments
+    postsController.getPostComments.bind(postsController)
 )
 postsRouter.post(
     '/:postId/comments',
     bearerAuthMiddleware,
     commentValidation,
     inputValidationMiddleware,
-    postsController.createComment
+    postsController.createComment.bind(postsController)
 )
 postsRouter.get(
     '/',
-    postsController.getPosts
+    postsController.getPosts.bind(postsController)
 )
 postsRouter.post(
     '/',
@@ -177,11 +183,11 @@ postsRouter.post(
     contentValidation,
     blogIdValidation,
     inputValidationMiddleware,
-    postsController.createPost
+    postsController.createPost.bind(postsController)
 )
 postsRouter.get(
     '/:postId',
-    postsController.getPost
+    postsController.getPost.bind(postsController)
 )
 
 postsRouter.put(
@@ -192,11 +198,11 @@ postsRouter.put(
     contentValidation,
     blogIdValidation,
     inputValidationMiddleware,
-    postsController.updatePost
+    postsController.updatePost.bind(postsController)
 )
 postsRouter.delete(
     '/:postId',
     authMiddleware,
-    postsController.deletePost
+    postsController.deletePost.bind(postsController)
 )
 

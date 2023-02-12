@@ -1,12 +1,12 @@
 import {Request, Response, Router} from "express";
 import {BlogsService} from "../domain/blogs-service";
+import {PostsService} from "../domain/posts-service";
 import {body, param} from "express-validator";
 import {
     inputValidationMiddleware,
     requestsCounterMiddleware
 } from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
-import {postsService} from "../domain/posts-service";
 import {contentValidation, descValidation, titleValidation} from "./posts-router";
 
 export const blogsRouter = Router({})
@@ -41,8 +41,10 @@ const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
 class BlogsController {
 
     private blogsService: BlogsService
+    private postsService: PostsService;
     constructor() {
         this.blogsService = new BlogsService()
+        this.postsService = new PostsService()
     }
 
     async getBlogs(req: Request, res: Response) {
@@ -74,7 +76,7 @@ class BlogsController {
             const pageSize = req.query.pageSize ? +req.query.pageSize : 10
             const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
             const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-            const posts = await postsService.getPosts(
+            const posts = await this.postsService.getPosts(
                 req.params.blogId,
                 pageNumber,
                 pageSize,
@@ -87,7 +89,7 @@ class BlogsController {
     }
 
     async createBlogPost(req: Request, res: Response) {
-        const newPost = await postsService.createPost(
+        const newPost = await this.postsService.createPost(
             req.body.title,
             req.body.shortDescription,
             req.body.content,

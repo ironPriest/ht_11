@@ -1,14 +1,16 @@
 import {PostType} from "../types/types";
-import {postsRepository} from "../repositories/posts-repository";
+import {PostsRepository} from "../repositories/posts-repository";
 import {v4} from "uuid";
 import {ObjectId} from "mongodb";
 import {BlogsRepository} from "../repositories/blogs-repository";
 
-class PostsService {
+export class PostsService {
 
-    blogsRepository: BlogsRepository;
+    blogsRepository: BlogsRepository
+    postsRepository: PostsRepository
     constructor() {
         this.blogsRepository = new BlogsRepository()
+        this.postsRepository = new PostsRepository()
     }
 
     async getPosts(
@@ -17,7 +19,7 @@ class PostsService {
         pageSize: number,
         sortBy: string,
         sortDirection: string) {
-        return await postsRepository.getPosts(
+        return await this.postsRepository.getPosts(
             blogId,
             pageNumber,
             pageSize,
@@ -26,7 +28,7 @@ class PostsService {
     }
 
     async getPostById(postId: string): Promise<Omit<PostType, '_id'> | null> {
-        let post: PostType | null = await postsRepository.getPostById(postId)
+        let post: PostType | null = await this.postsRepository.getPostById(postId)
         if (post) {
             return {
                 id: post.id,
@@ -59,7 +61,7 @@ class PostsService {
             new Date().toISOString()
         )
 
-        const createdPost = await postsRepository.createPost(post)
+        const createdPost = await this.postsRepository.createPost(post)
 
         if (createdPost) {
             return {
@@ -78,13 +80,11 @@ class PostsService {
     }
 
     async updatePost(postId: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
-        return postsRepository.updatePost(postId, title, shortDescription, content, blogId)
+        return this.postsRepository.updatePost(postId, title, shortDescription, content, blogId)
     }
 
     async deletePost(postId: string): Promise<boolean> {
-        return postsRepository.deletePost(postId)
+        return this.postsRepository.deletePost(postId)
     }
 
 }
-
-export const postsService = new PostsService()

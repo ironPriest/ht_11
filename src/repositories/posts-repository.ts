@@ -1,9 +1,8 @@
-import {PostType, BlogType} from "../types/types";
-import {BlogModelClass, PostModelClass} from "./db";
-import {ObjectId} from "mongodb";
-import {v4} from "uuid";
+import {PostType} from "../types/types";
+import {PostModelClass} from "./db";
 
-class PostsRepository {
+export class PostsRepository {
+
     async getPosts(
         blogId: string | null,
         pageNumber: number,
@@ -40,10 +39,12 @@ class PostsRepository {
             "items": await query
         }
     }
+
     //todo what better: id vs postId
     async getPostById(postId: string): Promise<PostType | null> {
         return PostModelClass.findOne({id: postId}).lean()
     }
+
     async createPost(post: PostType): Promise<PostType | null> {
 
         const newPostInstance = new PostModelClass(post)
@@ -53,6 +54,7 @@ class PostsRepository {
         return newPostInstance
 
     }
+
     async updatePost(
         postId: string,
         title: string,
@@ -63,13 +65,6 @@ class PostsRepository {
         const postInstance = await  PostModelClass.findOne({id: postId})
         if (!postInstance) return false
 
-        // await PostModelClass.updateOne({id: postId}, {$set: {
-        //     title: title,
-        //         shortDescription: shortDescription,
-        //         content: content,
-        //         bloggerId: blogId
-        // }})
-
         postInstance.title = title
         postInstance.shortDescription = shortDescription
         postInstance.content = content
@@ -79,9 +74,8 @@ class PostsRepository {
 
         return true
     }
+
     async deletePost(postId: string): Promise<boolean> {
-        // let result = await PostModelClass.deleteOne({id: postId})
-        // return result.deletedCount === 1
 
         const postInstance = await PostModelClass.findOne({id: postId})
         if (!postInstance) return false
@@ -90,9 +84,9 @@ class PostsRepository {
 
         return true
     }
+
     async deleteAll() {
         await PostModelClass.deleteMany()
     }
-}
 
-export const postsRepository = new PostsRepository()
+}
