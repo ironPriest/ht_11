@@ -2,7 +2,8 @@ import {CommentType} from "../types/types";
 import {CommentModelClass} from "./db";
 import {likeStatusesRepository} from "./like-statuses-repository";
 
-class CommentsRepository {
+export class CommentsRepository {
+
     async create(newComment: CommentType): Promise<boolean> {
 
         const newCommentInstance = new CommentModelClass(newComment)
@@ -112,26 +113,8 @@ class CommentsRepository {
 
     }
 
-    // async countLikes(id: string, likeStatus: string): Promise<boolean> {
-    //
-    //     const comment = await CommentModelClass.findOne({id})
-    //     if (!comment) return false
-    //
-    //     switch (likeStatus) {
-    //         case 'Like':
-    //             comment.likesInfo.likesCount++
-    //             break
-    //         case 'Dislike':
-    //             comment.likesInfo.dislikesCount++
-    //             break
-    //     }
-    //
-    //     return true
-    // }
-
     async deleteAll() {
         await CommentModelClass.deleteMany()
     }
-}
 
-export const commentsRepository = new CommentsRepository()
+}

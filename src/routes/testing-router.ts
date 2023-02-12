@@ -3,7 +3,7 @@ import {BlogsRepository} from "../repositories/blogs-repository";
 import {PostsRepository} from "../repositories/posts-repository";
 import {UsersRepository} from "../repositories/users-repository";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
-import {commentsRepository} from "../repositories/comments-repository";
+import {CommentsRepository} from "../repositories/comments-repository";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {blackTokensRepository} from "../repositories/blacktockens-repository";
 import {timeStampsRepository} from "../repositories/time-stamps-repository";
@@ -17,10 +17,12 @@ class TestingController {
     private blogsRepository: BlogsRepository;
     private postsRepository: PostsRepository;
     private usersRepository: UsersRepository;
+    private commentsRepository: CommentsRepository;
     constructor() {
         this.blogsRepository = new BlogsRepository()
         this.postsRepository = new PostsRepository()
         this.usersRepository = new UsersRepository()
+        this.commentsRepository = new CommentsRepository()
     }
 
     async delete(req: Request, res: Response) {
@@ -28,7 +30,7 @@ class TestingController {
         await this.blogsRepository.deleteAll()
         await this.postsRepository.deleteAll()
         await this.usersRepository.deleteAll()
-        await commentsRepository.deleteAll()
+        await this.commentsRepository.deleteAll()
         await emailConfirmationRepository.deleteAll()
         await blackTokensRepository.deleteAll()
         await deviceAuthSessionsRepository.deleteAll()

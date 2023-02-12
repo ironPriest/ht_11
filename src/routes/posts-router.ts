@@ -5,7 +5,7 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {userCheckMiddleware} from "../middlewares/user-check-middleware";
 import {PostsService} from "../domain/posts-service";
-import {commentsService} from "../domain/comments-service";
+import {CommentsService} from "../domain/comments-service";
 import {BlogsService} from "../domain/blogs-service";
 import {PostModelClass} from "../repositories/db";
 
@@ -49,8 +49,10 @@ export const commentValidation = body('content')
 class PostsController {
 
     private postsService: PostsService
+    private commentsService: CommentsService;
     constructor() {
         this.postsService = new PostsService()
+        this.commentsService = new CommentsService()
     }
 
     async getPostComments(req: Request, res: Response) {
@@ -62,7 +64,7 @@ class PostsController {
             const pageSize = req.query.pageSize ? +req.query.pageSize : 10
             const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
             const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-            const comments = await commentsService.getPostComments(
+            const comments = await this.commentsService.getPostComments(
                 req.params.postId,
                 pageNumber,
                 pageSize,
@@ -78,7 +80,7 @@ class PostsController {
         if (!post) {
             res.sendStatus(404)
         } else {
-            const newComment = await commentsService.create(
+            const newComment = await this.commentsService.create(
                 req.body.content,
                 req.user!._id,
                 req.params.postId)

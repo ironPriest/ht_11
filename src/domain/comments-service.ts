@@ -1,14 +1,16 @@
 import {ObjectId} from "mongodb";
-import {commentsRepository} from "../repositories/comments-repository";
+import {CommentsRepository} from "../repositories/comments-repository";
 import {UsersRepository} from "../repositories/users-repository";
 import {CommentType, UserType} from "../types/types";
 import {v4} from "uuid";
 
-class CommentsService {
+export class CommentsService {
 
-    private usersRepository: UsersRepository;
+    usersRepository: UsersRepository;
+    commentsRepository: CommentsRepository;
     constructor() {
         this.usersRepository = new UsersRepository()
+        this.commentsRepository = new CommentsRepository()
     }
 
     async create(
@@ -40,7 +42,7 @@ class CommentsService {
             }
         )
 
-        let res = await commentsRepository.create(newComment)
+        let res = await this.commentsRepository.create(newComment)
         if (!res) return null
 
         return {
@@ -62,7 +64,7 @@ class CommentsService {
         sortBy: string,
         sortDirection: string,
         userId: string | undefined) {
-        return await commentsRepository.findPostComments(
+        return await this.commentsRepository.findPostComments(
             postId,
             pageNumber,
             pageSize,
@@ -74,20 +76,19 @@ class CommentsService {
 
     //todo --> remove this
     async updateLike(id: string, likeStatus: string): Promise<boolean> {
-        return commentsRepository.updateLike(id, likeStatus)
+        return this.commentsRepository.updateLike(id, likeStatus)
     }
 
     async updateComment(id: string, content: string) {
-        return commentsRepository.updateComment(id, content)
+        return this.commentsRepository.updateComment(id, content)
     }
 
     async delete(id: string): Promise<boolean> {
-        return await commentsRepository.delete(id)
+        return await this.commentsRepository.delete(id)
     }
 
     async getCommentById(id: string): Promise<CommentType | null> {
-        return await commentsRepository.findCommentById(id)
+        return await this.commentsRepository.findCommentById(id)
     }
-}
 
-export const commentsService = new CommentsService()
+}
