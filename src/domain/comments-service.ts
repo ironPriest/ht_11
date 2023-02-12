@@ -1,16 +1,22 @@
 import {ObjectId} from "mongodb";
 import {commentsRepository} from "../repositories/comments-repository";
-import {usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {CommentType, UserType} from "../types/types";
 import {v4} from "uuid";
 
 class CommentsService {
+
+    private usersRepository: UsersRepository;
+    constructor() {
+        this.usersRepository = new UsersRepository()
+    }
+
     async create(
         content: string,
         commentatorId: ObjectId,
         postId: string
     ): Promise<Omit<CommentType, "_id" | "postId"> | null> {
-        const user: UserType | null = await usersRepository.findById(commentatorId)
+        const user: UserType | null = await this.usersRepository.findById(commentatorId)
         //todo --> nested object creation syntax
         let userId = user!.id
         let userLogin = user!.login

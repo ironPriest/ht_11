@@ -1,10 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {jwtUtility} from "../application/jwt-utility";
-import {usersService} from "../domain/users-service";
-import {resolveObjectURL} from "buffer";
+import {UsersService} from "../domain/users-service";
+
+const usersService = new UsersService()
 
 export const userCheckMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    console.log('headers -->', req.headers)
     try {
         const auth = req.headers.authorization
         const token = auth!.split(' ')[1]

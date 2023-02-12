@@ -1,10 +1,16 @@
 import {ObjectId} from "mongodb";
-import {usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {authService} from "./auth-service";
 import {v4} from "uuid";
 import {UserType} from "../types/types";
 
-class UsersService {
+export class UsersService {
+
+    private usersRepository: any;
+    constructor() {
+        this.usersRepository = new UsersRepository()
+    }
+
     async create(
         login: string,
         password: string,
@@ -18,7 +24,7 @@ class UsersService {
             email,
             new Date()
         )
-        let res = await usersRepository.create(user)
+        let res = await this.usersRepository.create(user)
         if(!res){
             return
         }
@@ -29,30 +35,34 @@ class UsersService {
             createdAt: user.createdAt
         }
     }
+
     async findById(userId: any) {
-        let user = await usersRepository.findById(userId)
+        let user = await this.usersRepository.findById(userId)
         if (user) {
             return user
         } else {
             return null
         }
     }
+
     async findByLoginOrEmail(loginOrEmail: string) {
-        let user = await usersRepository.findByLoginOrEmail(loginOrEmail)
+        let user = await this.usersRepository.findByLoginOrEmail(loginOrEmail)
         if (user) {
             return user
         } else {
             return null
         }
     }
+
     async findByEmail(email: string) {
-        let user = await usersRepository.findByEmail(email)
+        let user = await this.usersRepository.findByEmail(email)
         if (user) {
             return user
         } else {
             return null
         }
     }
+
     async getUsers(
         searchLoginTerm: string | undefined,
         searchEmailTerm: string | undefined,
@@ -60,7 +70,7 @@ class UsersService {
         pageSize: number,
         sortBy: string,
         sortDirection: string) {
-        return await usersRepository.getUsers(
+        return await this.usersRepository.getUsers(
             searchLoginTerm,
             searchEmailTerm,
             pageNumber,
@@ -68,9 +78,9 @@ class UsersService {
             sortBy,
             sortDirection)
     }
-    async delete(id: string) {
-        return usersRepository.delete(id)
-    }
-}
 
-export const usersService = new UsersService()
+    async delete(id: string) {
+        return this.usersRepository.delete(id)
+    }
+
+}

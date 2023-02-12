@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {DeviceAuthSessionType, RecoveryCodeType, TokenType} from "../types/types";
 import {authService} from "../domain/auth-service";
 import {jwtUtility} from "../application/jwt-utility";
-import {usersService} from "../domain/users-service";
+import {UsersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {blackTokensRepository} from "../repositories/blacktockens-repository";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
@@ -12,6 +12,9 @@ import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
 export const authRouter = Router({})
+
+//todo usersService instance creation for middlewares authRouter
+const usersService = new UsersService()
 
 const loginValidation = body('login')
     .trim()
@@ -83,6 +86,11 @@ const recoveryCodeValidation = body('recoveryCode').custom(async (recoveryCode, 
 
 class AuthController {
 
+    private usersService: UsersService;
+    constructor() {
+        this.usersService = new UsersService()
+    }
+
     async login(req: Request, res: Response) {
 
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
@@ -120,7 +128,7 @@ class AuthController {
         const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
         if (!userId) return res.sendStatus(401)
 
-        const user = await usersService.findById(userId)
+        const user = await this.usersService.findById(userId)
         if (!user) return res.sendStatus(401)
 
         await jwtUtility.addToBlackList(reqRefreshToken)
@@ -171,7 +179,7 @@ class AuthController {
         let recoveryCodeEntity = await recoveryCodesRepository.findByRecoveryCode(req.body.recoveryCode)
         if (!recoveryCodeEntity) return res.sendStatus(404)
 
-        let user = await usersService.findByEmail(recoveryCodeEntity.email)
+        let user = await this.usersService.findByEmail(recoveryCodeEntity.email)
         if (!user) return res.sendStatus(404)
 
         await authService.newPassword(user.id, req.body.newPassword)
@@ -215,7 +223,7 @@ class AuthController {
         const token = req.headers.authorization.split(' ')[1]
         const userId = await jwtUtility.getUserIdByToken(token)
         if (!userId) return res.sendStatus(401)
-        const user = await usersService.findById(userId)
+        const user = await this.usersService.findById(userId)
         if (!user) return res.sendStatus(401)
         return res.status(200).send({
             email: user.email,

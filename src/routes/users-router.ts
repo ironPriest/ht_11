@@ -2,7 +2,7 @@ import {Request, Response, Router} from "express";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {body} from "express-validator";
-import {usersService} from "../domain/users-service";
+import {UsersService} from "../domain/users-service";
 
 export const usersRouter = Router({})
 
@@ -28,8 +28,13 @@ const emailValidation = body('email')
 
 class UsersController {
 
+    private usersService: UsersService
+    constructor() {
+        this.usersService = new UsersService()
+    }
+
     async createUser(req: Request, res: Response) {
-        const newUser = await usersService.create(
+        const newUser = await this.usersService.create(
             req.body.login,
             req.body.password,
             req.body.email)
@@ -41,7 +46,7 @@ class UsersController {
         const pageSize = req.query.pageSize ? +req.query.pageSize : 10
         const sortBy = req.query.sortBy ? req.query.sortBy.toString() : 'createdAt'
         const sortDirection = req.query.sortDirection ? req.query.sortDirection.toString() : 'Desc'
-        const users = await usersService.getUsers(
+        const users = await this.usersService.getUsers(
             req.query.searchLoginTerm?.toString(),
             req.query.searchEmailTerm?.toString(),
             pageNumber,
@@ -52,7 +57,7 @@ class UsersController {
     }
 
     async deleteUser(req: Request, res: Response) {
-        const isDeleted = await usersService.delete(req.params.id)
+        const isDeleted = await this.usersService.delete(req.params.id)
         if (isDeleted) {
             return res.sendStatus(204)
         } else {
@@ -70,9 +75,16 @@ usersRouter.post(
     passwordValidation,
     emailValidation,
     inputValidationMiddleware,
-    usersController.createUser
+    usersController.createUser.bind(usersController)
 )
 
-usersRouter.get('/', usersController.getUsers)
+usersRouter.get(
+    '/',
+    usersController.getUsers.bind(usersController)
+)
 
-usersRouter.delete('/:id', authMiddleware, usersController.deleteUser)
+usersRouter.delete(
+    '/:id',
+    authMiddleware,
+    usersController.deleteUser.bind(usersController)
+)

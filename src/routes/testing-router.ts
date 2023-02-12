@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {BlogsRepository} from "../repositories/blogs-repository";
 import {PostsRepository} from "../repositories/posts-repository";
-import {usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 import {commentsRepository} from "../repositories/comments-repository";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
@@ -16,16 +16,18 @@ class TestingController {
 
     private blogsRepository: BlogsRepository;
     private postsRepository: PostsRepository;
+    private usersRepository: UsersRepository;
     constructor() {
         this.blogsRepository = new BlogsRepository()
         this.postsRepository = new PostsRepository()
+        this.usersRepository = new UsersRepository()
     }
 
     async delete(req: Request, res: Response) {
 
         await this.blogsRepository.deleteAll()
         await this.postsRepository.deleteAll()
-        await usersRepository.deleteAll()
+        await this.usersRepository.deleteAll()
         await commentsRepository.deleteAll()
         await emailConfirmationRepository.deleteAll()
         await blackTokensRepository.deleteAll()

@@ -3,7 +3,7 @@ import {UserModelClass} from "./db";
 import {ObjectId} from "mongodb";
 
 
-class UsersRepository {
+export class UsersRepository {
     async create(newUser: UserType): Promise<UserType> {
 
         const newUserInstance = new UserModelClass(newUser)
@@ -84,5 +84,3 @@ class UsersRepository {
         await UserModelClass.deleteMany()
     }
 }
-
-export const usersRepository = new UsersRepository()

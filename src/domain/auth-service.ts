@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt'
-import {usersRepository} from "../repositories/users-repository";
+import {UsersRepository} from "../repositories/users-repository";
 import {EmailConfirmationType, RecoveryCodeType, UserType} from "../types/types";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";
@@ -9,6 +9,12 @@ import {emailService} from "./email-service";
 import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
 class AuthService {
+
+    private usersRepository: UsersRepository;
+    constructor() {
+        this.usersRepository = new UsersRepository()
+    }
+
     async createUser(login: string, password: string, email: string) {
         const passwordHash = await this._generateHash(password)
 
@@ -31,7 +37,7 @@ class AuthService {
             }),
             false
         )
-        const creationResult = await usersRepository.create(user)
+        const creationResult = await this.usersRepository.create(user)
         const confirmationResult = await emailConfirmationRepository.create(emailConformation)
         if (!confirmationResult) return null
         await emailService.register(
@@ -47,7 +53,7 @@ class AuthService {
         }
     }
     async confirmationResend(email: string) {
-        let user: UserType | null = await usersRepository.findByEmail(email)
+        let user: UserType | null = await this.usersRepository.findByEmail(email)
         if (user) {
             let userId = user.id
             let newConfirmationCode = v4()
@@ -70,7 +76,7 @@ class AuthService {
     }
     async newPassword(userId: string, newPassword: string) {
         const newPasswordHash = await this._generateHash(newPassword)
-        return await usersRepository.newPassword(userId, newPasswordHash)
+        return await this.usersRepository.newPassword(userId, newPasswordHash)
     }
     async _generateHash(password: string) {
         return await bcrypt.hash(password, 10)
@@ -78,7 +84,7 @@ class AuthService {
 
     async checkCredentials(loginOrEmail: string, password: string) {
 
-        const user = await usersRepository.findByLoginOrEmail(loginOrEmail)
+        const user = await this.usersRepository.findByLoginOrEmail(loginOrEmail)
         if (!user) return null
 
         const result = await bcrypt.compare(password, user.passwordHash)
