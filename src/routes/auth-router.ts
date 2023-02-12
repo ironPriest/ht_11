@@ -3,7 +3,7 @@ import {DeviceAuthSessionType, RecoveryCodeType, TokenType} from "../types/types
 import {authService} from "../domain/auth-service";
 import {jwtUtility} from "../application/jwt-utility";
 import {UsersService} from "../domain/users-service";
-import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
+import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {blackTokensRepository} from "../repositories/blacktockens-repository";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
@@ -15,6 +15,7 @@ export const authRouter = Router({})
 
 //todo usersService instance creation for middlewares authRouter
 const usersService = new UsersService()
+const emailConfirmationRepository = new EmailconfirmationRepository()
 
 const loginValidation = body('login')
     .trim()

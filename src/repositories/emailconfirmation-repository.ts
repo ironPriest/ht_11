@@ -1,7 +1,8 @@
-import {BlogType, EmailConfirmationType} from "../types/types";
+import {EmailConfirmationType} from "../types/types";
 import {EmailConfirmationModelClass} from "./db";
 
-class EmailconfirmationRepository {
+export class EmailconfirmationRepository {
+
     async create(newEmailConformation: EmailConfirmationType): Promise<boolean> {
 
         const newEmailConfirmationInstance = new EmailConfirmationModelClass(newEmailConformation)
@@ -10,6 +11,7 @@ class EmailconfirmationRepository {
 
         return true
     }
+
     async update(userId: string, newConfirmationCode: string): Promise<boolean> {
 
         const emailConfirmationInstance = await EmailConfirmationModelClass.findOne({userId})
@@ -21,6 +23,7 @@ class EmailconfirmationRepository {
 
         return true
     }
+
     async updateStatus(userId: string): Promise<boolean> {
 
         const emailConfirmationInstance = await EmailConfirmationModelClass.findOne({userId})
@@ -32,15 +35,17 @@ class EmailconfirmationRepository {
 
         return true
     }
+
     async findByCode(code: string): Promise<EmailConfirmationType | null> {
         return EmailConfirmationModelClass.findOne({confirmationCode: code}).lean()
     }
+
     async findByUserId(userId: string): Promise<EmailConfirmationType | null> {
         return EmailConfirmationModelClass.findOne({userId}).lean()
     }
+
     async deleteAll() {
         await EmailConfirmationModelClass.deleteMany()
     }
-}
 
-export const emailConfirmationRepository = new EmailconfirmationRepository()
+}
