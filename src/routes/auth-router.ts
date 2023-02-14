@@ -1,10 +1,10 @@
 import {Request, Response, Router} from "express";
 import {DeviceAuthSessionType, RecoveryCodeType, TokenType} from "../types/types";
 import {authService} from "../domain/auth-service";
-import {jwtUtility} from "../application/jwt-utility";
+import {JwtUtility} from "../application/jwt-utility";
 import {UsersService} from "../domain/users-service";
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
-import {blackTokensRepository} from "../repositories/blacktockens-repository";
+import {BlacktokensRepository} from "../repositories/blacktockens-repository";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
 import {body, header} from "express-validator";
@@ -88,8 +88,12 @@ const recoveryCodeValidation = body('recoveryCode').custom(async (recoveryCode, 
 class AuthController {
 
     private usersService: UsersService;
+    private blackTokensRepository: BlacktokensRepository;
+    private jwtUtility: JwtUtility;
     constructor() {
         this.usersService = new UsersService()
+        this.blackTokensRepository = new BlacktokensRepository()
+        this.jwtUtility = new JwtUtility()
     }
 
     async login(req: Request, res: Response) {
@@ -105,8 +109,8 @@ class AuthController {
         const deviceAuthSession: DeviceAuthSessionType = await deviceAuthSessionsService.create(ip, title, userId)
         const deviceId = deviceAuthSession.deviceId
 
-        const token = await jwtUtility.createJWT(user)
-        const refreshToken = await jwtUtility.createRefreshToken(user, deviceId)
+        const token = await this.jwtUtility.createJWT(user)
+        const refreshToken = await this.jwtUtility.createRefreshToken(user, deviceId)
 
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -123,23 +127,23 @@ class AuthController {
 
         const reqRefreshToken = req.cookies.refreshToken
         // token check
-        const blackToken: TokenType | null = await blackTokensRepository.check(reqRefreshToken)
+        const blackToken: TokenType | null = await this.blackTokensRepository.check(reqRefreshToken)
         if (blackToken) return res.sendStatus(401)
 
-        const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
+        const userId = await this.jwtUtility.getUserIdByToken(req.cookies.refreshToken)
         if (!userId) return res.sendStatus(401)
 
         const user = await this.usersService.findById(userId)
         if (!user) return res.sendStatus(401)
 
-        await jwtUtility.addToBlackList(reqRefreshToken)
+        await this.jwtUtility.addToBlackList(reqRefreshToken)
 
-        const token = await jwtUtility.createJWT(user)
+        const token = await this.jwtUtility.createJWT(user)
 
         const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user._id)
         if (!deviceAuthSession) return res.sendStatus(404)
 
-        const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession.deviceId)
+        const refreshToken = await this.jwtUtility.createRefreshToken(user, deviceAuthSession.deviceId)
 
         const updateRes = await deviceAuthSessionsService.update(deviceAuthSession.deviceId)
         if (!updateRes) return res.sendStatus(400)
@@ -192,13 +196,13 @@ class AuthController {
         const refreshToken = req.cookies.refreshToken
         if (!refreshToken) return res.sendStatus(401)
 
-        const blackToken: TokenType | null = await blackTokensRepository.check(refreshToken)
+        const blackToken: TokenType | null = await this.blackTokensRepository.check(refreshToken)
         if (blackToken) return res.sendStatus(401)
 
-        const userId = await jwtUtility.getUserIdByToken(refreshToken)
+        const userId = await this.jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
 
-        const deviceId = await jwtUtility.getDeviceIdByToken(refreshToken)
+        const deviceId = await this.jwtUtility.getDeviceIdByToken(refreshToken)
 
         const session = await deviceAuthSessionsService.getSessionByUserId(userId)
         if (!session) return res.sendStatus(401)
@@ -206,7 +210,7 @@ class AuthController {
         const deleteResult = await deviceAuthSessionsService.deleteSession(deviceId, userId)
         if (!deleteResult) return res.sendStatus(400)
 
-        const addingResult = await jwtUtility.addToBlackList(refreshToken)
+        const addingResult = await this.jwtUtility.addToBlackList(refreshToken)
         if (!addingResult) return res.sendStatus(400)
 
         return res.status(204).cookie('refreshToken', '', {
@@ -222,7 +226,7 @@ class AuthController {
         const authType = req.headers.authorization.split(' ')[0]
         if (authType !== 'Bearer') return res.sendStatus(401)
         const token = req.headers.authorization.split(' ')[1]
-        const userId = await jwtUtility.getUserIdByToken(token)
+        const userId = await this.jwtUtility.getUserIdByToken(token)
         if (!userId) return res.sendStatus(401)
         const user = await this.usersService.findById(userId)
         if (!user) return res.sendStatus(401)
@@ -240,12 +244,12 @@ const authController = new AuthController()
 authRouter.post(
     '/login',
     rateLimiter,
-    authController.login
+    authController.login.bind(authController)
 )
 
 authRouter.post(
     '/refresh-token',
-    authController.refreshToken
+    authController.refreshToken.bind(authController)
 )
 
 authRouter.post(
@@ -257,21 +261,21 @@ authRouter.post(
     doubleEmailValidation,
     inputValidationMiddleware,
     rateLimiter,
-    authController.registration
+    authController.registration.bind(authController)
 )
 
 authRouter.post('/registration-confirmation',
     doubleConfirmValidation,
     rateLimiter,
     inputValidationMiddleware,
-    authController.registrationConfirmation
+    authController.registrationConfirmation.bind(authController)
 )
 
 authRouter.post('/registration-email-resending',
     doubleResendingValidation,
     inputValidationMiddleware,
     rateLimiter,
-    authController.registrationEmailResending
+    authController.registrationEmailResending.bind(authController)
 )
 
 authRouter.post(
@@ -279,7 +283,7 @@ authRouter.post(
     emailValidation,
     inputValidationMiddleware,
     rateLimiter,
-    authController.passwordRecovery
+    authController.passwordRecovery.bind(authController)
 )
 
 authRouter.post(
@@ -288,16 +292,16 @@ authRouter.post(
     recoveryCodeValidation,
     rateLimiter,
     inputValidationMiddleware,
-    authController.newPassword
+    authController.newPassword.bind(authController)
 )
 
 authRouter.post(
     '/logout',
-    authController.logout
+    authController.logout.bind(authController)
 )
 
 authRouter.get(
     '/me',
     bearerAuthMiddleware,
-    authController.me
+    authController.me.bind(authController)
 )

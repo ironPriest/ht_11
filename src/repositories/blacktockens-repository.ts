@@ -1,7 +1,7 @@
 import {TokenType} from "../types/types";
 import {BlackTokenModelClass} from "./db";
 
-class BlacktokensRepository {
+export class BlacktokensRepository {
     async addToList(token: TokenType): Promise<boolean> {
         const newBlackTokenInstance = new BlackTokenModelClass(token)
         await newBlackTokenInstance.save()
@@ -16,5 +16,3 @@ class BlacktokensRepository {
         await BlackTokenModelClass.deleteMany({})
     }
 }
-
-export const blackTokensRepository = new BlacktokensRepository()

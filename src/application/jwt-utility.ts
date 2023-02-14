@@ -2,15 +2,23 @@ import {TokenType, UserType} from "../types/types";
 import jwt from 'jsonwebtoken'
 import {settings} from "../types/settings";
 import {ObjectId} from "mongodb";
-import {blackTokensRepository} from "../repositories/blacktockens-repository";
+import {BlacktokensRepository} from "../repositories/blacktockens-repository";
 
-class JwtUtility {
+export class JwtUtility {
+
+    blackTokensRepository: BlacktokensRepository;
+    constructor() {
+        this.blackTokensRepository = new BlacktokensRepository()
+    }
+
     async createJWT(user: UserType) {
         return jwt.sign({userId: user._id}, settings.JWT_SECRET, {expiresIn: '1h'})
     }
+
     async createRefreshToken(user: UserType, deviceId: string) {
         return jwt.sign({userId: user._id, deviceId: deviceId}, settings.JWT_SECRET, {expiresIn: '1h'})
     }
+
     async getUserIdByToken(token: string) {
         try {
             const result: any = await jwt.verify(token, settings.JWT_SECRET)
@@ -20,6 +28,7 @@ class JwtUtility {
             return null
         }
     }
+
     async getDeviceIdByToken(token: string) {
         try {
             const result: any = await jwt.verify(token, settings.JWT_SECRET)
@@ -28,6 +37,7 @@ class JwtUtility {
             return null
         }
     }
+
     async addToBlackList(corruptedToken: string) {
 
         let token = new TokenType(
@@ -35,8 +45,7 @@ class JwtUtility {
             corruptedToken
         )
 
-        return blackTokensRepository.addToList(token)
+        return this.blackTokensRepository.addToList(token)
     }
-}
 
-export const jwtUtility = new JwtUtility()
+}
