@@ -1,8 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {ObjectId} from "mongodb";
 import {validationResult} from "express-validator";
-import {timeStampsRepository} from "../repositories/time-stamps-repository";
+import {TimeStampsRepository} from "../repositories/time-stamps-repository";
 import {TimeStampType} from "../types/types";
+
+const timeStampsRepository = new TimeStampsRepository()
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

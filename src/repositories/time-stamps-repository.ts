@@ -1,8 +1,8 @@
 import {TimeStampModelClass} from "./db";
-import {BlogType, TimeStampType} from "../types/types";
+import {TimeStampType} from "../types/types";
 import {sub} from "date-fns";
 
-class TimeStampsRepository {
+export class TimeStampsRepository {
 
     async add(newTimeStamp: TimeStampType): Promise<boolean> {
 
@@ -38,5 +38,3 @@ class TimeStampsRepository {
     }
 
 }
-
-export const timeStampsRepository = new TimeStampsRepository()
