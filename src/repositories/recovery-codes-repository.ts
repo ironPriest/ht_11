@@ -1,7 +1,7 @@
 import {RecoveryCodeModelClass} from "./db";
 import {RecoveryCodeType} from "../types/types";
 
-class RecoveryCodesRepository {
+export class RecoveryCodesRepository {
 
     async create(newRecoveryCode: RecoveryCodeType): Promise<boolean> {
 
@@ -21,5 +21,3 @@ class RecoveryCodesRepository {
     }
 
 }
-
-export const recoveryCodesRepository = new RecoveryCodesRepository()

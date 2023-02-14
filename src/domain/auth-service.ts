@@ -6,15 +6,17 @@ import {v4} from "uuid";
 import add from "date-fns/add"
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {emailService} from "./email-service";
-import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
+import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
-class AuthService {
+export class AuthService {
 
     usersRepository: UsersRepository;
     emailConfirmationRepository: EmailconfirmationRepository;
+    recoveryCodesRepository: RecoveryCodesRepository;
     constructor() {
         this.usersRepository = new UsersRepository()
         this.emailConfirmationRepository = new EmailconfirmationRepository()
+        this.recoveryCodesRepository = new RecoveryCodesRepository()
     }
 
     async createUser(login: string, password: string, email: string) {
@@ -76,7 +78,7 @@ class AuthService {
             email,
             recoveryCode
         )
-        await recoveryCodesRepository.create(recoveryCodeEntity)
+        await this.recoveryCodesRepository.create(recoveryCodeEntity)
         await emailService.passwordRecovery(email, 'password recovery', recoveryCode)
     }
 
@@ -100,5 +102,3 @@ class AuthService {
         return user
     }
 }
-
-export const authService = new AuthService()

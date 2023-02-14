@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {DeviceAuthSessionType, RecoveryCodeType, TokenType} from "../types/types";
-import {authService} from "../domain/auth-service";
+import {AuthService} from "../domain/auth-service";
 import {JwtUtility} from "../application/jwt-utility";
 import {UsersService} from "../domain/users-service";
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
@@ -9,13 +9,14 @@ import {DeviceAuthSessionsService} from "../domain/device-auth-sessions-service"
 import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
 import {body, header} from "express-validator";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
-import {recoveryCodesRepository} from "../repositories/recovery-codes-repository";
+import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
 export const authRouter = Router({})
 
 //todo usersService instance creation for middlewares authRouter
 const usersService = new UsersService()
 const emailConfirmationRepository = new EmailconfirmationRepository()
+const recoveryCodesRepository = new RecoveryCodesRepository()
 
 const loginValidation = body('login')
     .trim()
@@ -91,16 +92,20 @@ class AuthController {
     private blackTokensRepository: BlacktokensRepository;
     private jwtUtility: JwtUtility;
     private deviceAuthSessionsService: DeviceAuthSessionsService;
+    private recoveryCodesRepository: RecoveryCodesRepository;
+    private authService: AuthService;
     constructor() {
         this.usersService = new UsersService()
         this.blackTokensRepository = new BlacktokensRepository()
         this.jwtUtility = new JwtUtility()
         this.deviceAuthSessionsService = new DeviceAuthSessionsService()
+        this.recoveryCodesRepository = new RecoveryCodesRepository()
+        this.authService = new AuthService()
     }
 
     async login(req: Request, res: Response) {
 
-        const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
+        const user = await this.authService.checkCredentials(req.body.loginOrEmail, req.body.password)
 
         if (!user) return res.sendStatus(401)
         const userId = user._id
@@ -159,7 +164,7 @@ class AuthController {
     }
 
     async registration(req: Request, res: Response) {
-        await authService.createUser(
+        await this.authService.createUser(
             req.body.login,
             req.body.password,
             req.body.email)
@@ -167,29 +172,29 @@ class AuthController {
     }
 
     async registrationConfirmation(req: Request, res: Response) {
-        await authService.confirm(req.body.code)
+        await this.authService.confirm(req.body.code)
         return res.sendStatus(204)
     }
 
     async registrationEmailResending(req: Request, res: Response) {
-        await authService.confirmationResend(req.body.email)
+        await this.authService.confirmationResend(req.body.email)
         return res.sendStatus(204)
     }
 
     async passwordRecovery(req: Request, res: Response) {
-        await authService.passwordRecovery(req.body.email)
+        await this.authService.passwordRecovery(req.body.email)
         return res.sendStatus(204)
     }
 
     async newPassword(req: Request, res: Response) {
 
-        let recoveryCodeEntity = await recoveryCodesRepository.findByRecoveryCode(req.body.recoveryCode)
+        let recoveryCodeEntity = await this.recoveryCodesRepository.findByRecoveryCode(req.body.recoveryCode)
         if (!recoveryCodeEntity) return res.sendStatus(404)
 
         let user = await this.usersService.findByEmail(recoveryCodeEntity.email)
         if (!user) return res.sendStatus(404)
 
-        await authService.newPassword(user.id, req.body.newPassword)
+        await this.authService.newPassword(user.id, req.body.newPassword)
         return res.sendStatus(204)
     }
 

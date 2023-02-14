@@ -1,21 +1,23 @@
 import {ObjectId} from "mongodb";
 import {UsersRepository} from "../repositories/users-repository";
-import {authService} from "./auth-service";
+import {AuthService} from "./auth-service";
 import {v4} from "uuid";
 import {UserType} from "../types/types";
 
 export class UsersService {
 
-    private usersRepository: any;
+    usersRepository: any;
+    authService: AuthService;
     constructor() {
         this.usersRepository = new UsersRepository()
+        this.authService = new AuthService()
     }
 
     async create(
         login: string,
         password: string,
         email: string) {
-        const passwordHash = await authService._generateHash(password)
+        const passwordHash = await this.authService._generateHash(password)
         let user = new UserType(
             new ObjectId(),
             v4(),
