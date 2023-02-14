@@ -1,12 +1,16 @@
-import {emailManager} from "../managers/email-manager";
+import {EmailManager} from "../managers/email-manager";
 
-class EmailService {
+export class EmailService {
+
+    emailManager: EmailManager;
+    constructor() {
+        this.emailManager = new EmailManager()
+    }
+
     async register(email: string, subject: string, code: string) {
-        await emailManager.sendRegistrationCode(email, subject, code)
+        await this.emailManager.sendRegistrationCode(email, subject, code)
     }
     async passwordRecovery(email: string, subject: string, code: string) {
-        await emailManager.passwordRecovery(email, subject, code)
+        await this.emailManager.passwordRecovery(email, subject, code)
     }
 }
-
-export const emailService = new EmailService()

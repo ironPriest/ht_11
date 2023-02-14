@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-class EmailAdapter {
+export class EmailAdapter {
     async sendEmail(email: string, subject: string, code: string) {
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -52,5 +52,3 @@ class EmailAdapter {
         return info
     }
 }
-
-export const emailAdapter = new EmailAdapter()

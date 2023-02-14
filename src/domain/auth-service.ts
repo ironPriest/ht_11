@@ -5,7 +5,7 @@ import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 import add from "date-fns/add"
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
-import {emailService} from "./email-service";
+import {EmailService} from "./email-service";
 import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
 
 export class AuthService {
@@ -13,10 +13,12 @@ export class AuthService {
     usersRepository: UsersRepository;
     emailConfirmationRepository: EmailconfirmationRepository;
     recoveryCodesRepository: RecoveryCodesRepository;
+    emailService: EmailService;
     constructor() {
         this.usersRepository = new UsersRepository()
         this.emailConfirmationRepository = new EmailconfirmationRepository()
         this.recoveryCodesRepository = new RecoveryCodesRepository()
+        this.emailService = new EmailService()
     }
 
     async createUser(login: string, password: string, email: string) {
@@ -44,7 +46,7 @@ export class AuthService {
         const creationResult = await this.usersRepository.create(user)
         const confirmationResult = await this.emailConfirmationRepository.create(emailConformation)
         if (!confirmationResult) return null
-        await emailService.register(
+        await this.emailService.register(
             user.email,
             'subject',
             emailConformation.confirmationCode)
@@ -64,7 +66,7 @@ export class AuthService {
             let userId = user.id
             let newConfirmationCode = v4()
             await this.emailConfirmationRepository.update(userId, newConfirmationCode)
-            await emailService.register(email, 'subject', newConfirmationCode)
+            await this.emailService.register(email, 'subject', newConfirmationCode)
         } else {
             return null
         }
@@ -79,7 +81,7 @@ export class AuthService {
             recoveryCode
         )
         await this.recoveryCodesRepository.create(recoveryCodeEntity)
-        await emailService.passwordRecovery(email, 'password recovery', recoveryCode)
+        await this.emailService.passwordRecovery(email, 'password recovery', recoveryCode)
     }
 
     async newPassword(userId: string, newPassword: string) {
