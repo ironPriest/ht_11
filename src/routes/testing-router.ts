@@ -8,7 +8,7 @@ import {EmailconfirmationRepository} from "../repositories/emailconfirmation-rep
 import {BlacktokensRepository} from "../repositories/blacktockens-repository";
 import {TimeStampsRepository} from "../repositories/time-stamps-repository";
 import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository";
-import {likeStatusesRepository} from "../repositories/like-statuses-repository";
+import {LikeStatusesRepository} from "../repositories/like-statuses-repository";
 
 export const testingRouter = Router({})
 
@@ -23,6 +23,7 @@ class TestingController {
     private deviceAuthSessionsRepository: DeviceAuthSessionsRepository;
     private timeStampsRepository: TimeStampsRepository;
     private recoveryCodesRepository: RecoveryCodesRepository;
+    private likeStatusesRepository: LikeStatusesRepository;
     constructor() {
         this.blogsRepository = new BlogsRepository()
         this.postsRepository = new PostsRepository()
@@ -33,6 +34,7 @@ class TestingController {
         this.deviceAuthSessionsRepository = new DeviceAuthSessionsRepository()
         this.timeStampsRepository = new TimeStampsRepository()
         this.recoveryCodesRepository = new RecoveryCodesRepository()
+        this.likeStatusesRepository = new LikeStatusesRepository()
     }
 
     async delete(req: Request, res: Response) {
@@ -46,7 +48,7 @@ class TestingController {
         await this.deviceAuthSessionsRepository.deleteAll()
         await this.timeStampsRepository.deleteAll()
         await this.recoveryCodesRepository.deleteAll()
-        await likeStatusesRepository.deleteAll()
+        await this.likeStatusesRepository.deleteAll()
 
         res.sendStatus(204)
     }

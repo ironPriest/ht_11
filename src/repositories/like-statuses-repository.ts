@@ -1,14 +1,10 @@
 import {CommentModelClass, LikeStatusModelClass} from "./db";
 import {LikeStatus} from "../types/types";
 
-class LikeStatusesRepository {
+export class LikeStatusesRepository {
     async create(newLikeStatus: LikeStatus): Promise<boolean> {
 
         const newLikeStatusInstance = new LikeStatusModelClass(newLikeStatus)
-
-        // newLikeStatusInstance.userId = newLikeStatus.userId
-        // newLikeStatusInstance.commentId = newLikeStatus.commentId
-        // newLikeStatusInstance.likeStatus = newLikeStatus.likeStatus
 
         await newLikeStatusInstance.save()
 
@@ -54,5 +50,3 @@ class LikeStatusesRepository {
         await LikeStatusModelClass.deleteMany()
     }
 }
-
-export const likeStatusesRepository = new LikeStatusesRepository()

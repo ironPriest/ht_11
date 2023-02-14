@@ -1,8 +1,13 @@
 import {CommentType} from "../types/types";
 import {CommentModelClass} from "./db";
-import {likeStatusesRepository} from "./like-statuses-repository";
+import {LikeStatusesRepository} from "./like-statuses-repository";
 
 export class CommentsRepository {
+
+    likeStatusesRepository: LikeStatusesRepository;
+    constructor() {
+        this.likeStatusesRepository = new LikeStatusesRepository()
+    }
 
     async create(newComment: CommentType): Promise<boolean> {
 
@@ -44,11 +49,11 @@ export class CommentsRepository {
 
 
         let mappedComments = await Promise.all(query.map(async  comment => {
-            comment.likesInfo.likesCount = await likeStatusesRepository.likesCount(comment.id)
-            comment.likesInfo.dislikesCount = await likeStatusesRepository.dislikesCount(comment.id)
+            comment.likesInfo.likesCount = await this.likeStatusesRepository.likesCount(comment.id)
+            comment.likesInfo.dislikesCount = await this.likeStatusesRepository.dislikesCount(comment.id)
             comment.likesInfo.myStatus = "None"
             if (userId) {
-                let likeStatus = await likeStatusesRepository.getLikeStatus(userId, comment.id)
+                let likeStatus = await this.likeStatusesRepository.getLikeStatus(userId, comment.id)
                 if (!likeStatus) {
                     comment.likesInfo.myStatus = "None"
                 } else {
