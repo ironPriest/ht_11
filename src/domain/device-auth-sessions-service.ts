@@ -2,9 +2,15 @@ import {DeviceAuthSessionType} from "../types/types";
 import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 import add from "date-fns/add";
-import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
+import {DeviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 
-class DeviceAuthSessionsService {
+export class DeviceAuthSessionsService {
+
+    private deviceAuthSessionsRepository: DeviceAuthSessionsRepository;
+    constructor() {
+        this.deviceAuthSessionsRepository = new DeviceAuthSessionsRepository()
+    }
+
     async create(ip: string, title: string, userId: ObjectId) {
 
         const deviceAuthSession = new DeviceAuthSessionType(
@@ -17,25 +23,29 @@ class DeviceAuthSessionsService {
             add(new Date(), {seconds: 20})
         )
 
-        await deviceAuthSessionsRepository.create(deviceAuthSession)
+        await this.deviceAuthSessionsRepository.create(deviceAuthSession)
         return deviceAuthSession
     }
+
     async update(deviceId: string) {
         const newLastActiveDate = new Date().toISOString()
-        return await deviceAuthSessionsRepository.update(deviceId, newLastActiveDate)
+        return await this.deviceAuthSessionsRepository.update(deviceId, newLastActiveDate)
     }
-    async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
-        return await deviceAuthSessionsRepository.getSessionByUserId(userId)
-    }
-    async getSessions(userId: ObjectId) {
-        return await deviceAuthSessionsRepository.getSessions(userId)
-    }
-    async deleteExcept(userId: ObjectId, deviceId: string) {
-        await deviceAuthSessionsRepository.deleteExcept(userId, deviceId)
-    }
-    async deleteSession(deviceId: string, userId: ObjectId) {
-        return deviceAuthSessionsRepository.deleteSession(deviceId, userId)
-    }
-}
 
-export const deviceAuthSessionsService = new DeviceAuthSessionsService()
+    async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
+        return await this.deviceAuthSessionsRepository.getSessionByUserId(userId)
+    }
+
+    async getSessions(userId: ObjectId) {
+        return await this.deviceAuthSessionsRepository.getSessions(userId)
+    }
+
+    async deleteExcept(userId: ObjectId, deviceId: string) {
+        await this.deviceAuthSessionsRepository.deleteExcept(userId, deviceId)
+    }
+
+    async deleteSession(deviceId: string, userId: ObjectId) {
+        return this.deviceAuthSessionsRepository.deleteSession(deviceId, userId)
+    }
+
+}

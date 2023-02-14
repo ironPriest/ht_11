@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
-import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
+import {DeviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {JwtUtility} from "../application/jwt-utility";
-import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
+import {DeviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 import {TokenType} from "../types/types";
 import {BlacktokensRepository} from "../repositories/blacktockens-repository";
 
@@ -11,9 +11,13 @@ class SecurityDevicesController {
 
     private jwtUtility: JwtUtility;
     private blackTokensRepository: BlacktokensRepository;
+    private deviceAuthSessionsRepository: DeviceAuthSessionsRepository;
+    private deviceAuthSessionsService: DeviceAuthSessionsService;
     constructor() {
         this.jwtUtility = new JwtUtility()
         this.blackTokensRepository = new BlacktokensRepository()
+        this.deviceAuthSessionsRepository = new DeviceAuthSessionsRepository()
+        this.deviceAuthSessionsService = new DeviceAuthSessionsService()
     }
 
     async getDevices(req: Request, res: Response) {
@@ -27,10 +31,10 @@ class SecurityDevicesController {
         const userId = await this.jwtUtility.getUserIdByToken(token)
         if (!userId) return res.sendStatus(401)
 
-        const checkSession = await deviceAuthSessionsRepository.getSessionByUserId(userId)
+        const checkSession = await this.deviceAuthSessionsRepository.getSessionByUserId(userId)
         if (!checkSession) return res.sendStatus(401)
 
-        const sessions = await deviceAuthSessionsService.getSessions(userId)
+        const sessions = await this.deviceAuthSessionsService.getSessions(userId)
 
         return res.status(200).send(sessions)
     }
@@ -47,14 +51,14 @@ class SecurityDevicesController {
         const deviceId = await this.jwtUtility.getDeviceIdByToken(token)
         if (!deviceId) return res.sendStatus(404)
 
-        await deviceAuthSessionsService.deleteExcept(userId, deviceId)
+        await this.deviceAuthSessionsService.deleteExcept(userId, deviceId)
 
         return res.sendStatus(204)
     }
 
     async deleteDevice(req: Request, res: Response) {
 
-        const session = await deviceAuthSessionsRepository.getSessionsByDeviceId(req.params.deviceId)
+        const session = await this.deviceAuthSessionsRepository.getSessionsByDeviceId(req.params.deviceId)
         if (!session) return res.sendStatus(404)
 
         if (!req.cookies.refreshToken) return res.sendStatus(401)
@@ -64,11 +68,11 @@ class SecurityDevicesController {
         const userId = await this.jwtUtility.getUserIdByToken(token)
         if (!userId) return res.sendStatus(401)
 
-        const result = await deviceAuthSessionsRepository.check(userId, req.params.deviceId)
+        const result = await this.deviceAuthSessionsRepository.check(userId, req.params.deviceId)
         if (!result) return res.sendStatus(403)
 
         //TODO better to check deleting result
-        await deviceAuthSessionsService.deleteSession(req.params.deviceId, userId)
+        await this.deviceAuthSessionsService.deleteSession(req.params.deviceId, userId)
 
         return res.sendStatus(204)
     }

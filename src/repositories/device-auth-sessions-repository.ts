@@ -2,7 +2,7 @@ import {DeviceAuthSessionType} from "../types/types";
 import {DeviceAuthSessionModelClass} from "./db";
 import {ObjectId} from "mongodb";
 
-class DeviceAuthSessionsRepository {
+export class DeviceAuthSessionsRepository {
     async create(deviceAuthSession: DeviceAuthSessionType): Promise<boolean> {
 
         const newDeviceAuthSessionInstance = new DeviceAuthSessionModelClass(deviceAuthSession)
@@ -56,5 +56,3 @@ class DeviceAuthSessionsRepository {
         return true
     }
 }
-
-export const deviceAuthSessionsRepository = new DeviceAuthSessionsRepository()

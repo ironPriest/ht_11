@@ -5,7 +5,7 @@ import {JwtUtility} from "../application/jwt-utility";
 import {UsersService} from "../domain/users-service";
 import {EmailconfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {BlacktokensRepository} from "../repositories/blacktockens-repository";
-import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
+import {DeviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
 import {body, header} from "express-validator";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
@@ -90,10 +90,12 @@ class AuthController {
     private usersService: UsersService;
     private blackTokensRepository: BlacktokensRepository;
     private jwtUtility: JwtUtility;
+    private deviceAuthSessionsService: DeviceAuthSessionsService;
     constructor() {
         this.usersService = new UsersService()
         this.blackTokensRepository = new BlacktokensRepository()
         this.jwtUtility = new JwtUtility()
+        this.deviceAuthSessionsService = new DeviceAuthSessionsService()
     }
 
     async login(req: Request, res: Response) {
@@ -106,7 +108,7 @@ class AuthController {
         const ip = req.ip
         const title = req.headers["user-agent"]!
 
-        const deviceAuthSession: DeviceAuthSessionType = await deviceAuthSessionsService.create(ip, title, userId)
+        const deviceAuthSession: DeviceAuthSessionType = await this.deviceAuthSessionsService.create(ip, title, userId)
         const deviceId = deviceAuthSession.deviceId
 
         const token = await this.jwtUtility.createJWT(user)
@@ -140,12 +142,12 @@ class AuthController {
 
         const token = await this.jwtUtility.createJWT(user)
 
-        const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user._id)
+        const deviceAuthSession: DeviceAuthSessionType | null = await this.deviceAuthSessionsService.getSessionByUserId(user._id)
         if (!deviceAuthSession) return res.sendStatus(404)
 
         const refreshToken = await this.jwtUtility.createRefreshToken(user, deviceAuthSession.deviceId)
 
-        const updateRes = await deviceAuthSessionsService.update(deviceAuthSession.deviceId)
+        const updateRes = await this.deviceAuthSessionsService.update(deviceAuthSession.deviceId)
         if (!updateRes) return res.sendStatus(400)
 
         return res.status(200).cookie('refreshToken', refreshToken, {
@@ -204,10 +206,10 @@ class AuthController {
 
         const deviceId = await this.jwtUtility.getDeviceIdByToken(refreshToken)
 
-        const session = await deviceAuthSessionsService.getSessionByUserId(userId)
+        const session = await this.deviceAuthSessionsService.getSessionByUserId(userId)
         if (!session) return res.sendStatus(401)
 
-        const deleteResult = await deviceAuthSessionsService.deleteSession(deviceId, userId)
+        const deleteResult = await this.deviceAuthSessionsService.deleteSession(deviceId, userId)
         if (!deleteResult) return res.sendStatus(400)
 
         const addingResult = await this.jwtUtility.addToBlackList(refreshToken)
