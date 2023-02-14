@@ -5,10 +5,8 @@ import {v4} from 'uuid';
 
 export class BlogsService {
 
-    blogsRepository: BlogsRepository
-    constructor() {
-        this.blogsRepository = new BlogsRepository()
-    }
+    constructor(protected blogsRepository: BlogsRepository) {}
+
 
     async getBlogs(
         searchTerm: string | undefined,

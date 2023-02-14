@@ -8,6 +8,7 @@ import {PostsService} from "../domain/posts-service";
 import {CommentsService} from "../domain/comments-service";
 import {BlogsService} from "../domain/blogs-service";
 import {PostModelClass} from "../repositories/db";
+import {BlogsRepository} from "../repositories/blogs-repository";
 
 
 export const postsRouter = Router({})
@@ -31,7 +32,9 @@ export const blogIdValidation = body('blogId')
     .exists({checkFalsy: true})
     .custom(async (blogId, ) => {
         //todo how it's better to deal with blogService instance postRouter
-        let blogsService = new BlogsService()
+        let blogsRepository = new BlogsRepository();
+        let blogsService = new BlogsService(blogsRepository)
+
         const blogger = await blogsService.getBlogById(blogId)
 
         if (!blogger) {
