@@ -6,11 +6,10 @@ import {UserType} from "../types/types";
 
 export class UsersService {
 
-    usersRepository: any;
-    authService: AuthService;
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.authService = new AuthService()
+    constructor(
+        protected usersRepository: UsersRepository,
+        protected authService: AuthService
+    ) {
     }
 
     async create(

@@ -10,15 +10,13 @@ import {RecoveryCodesRepository} from "../repositories/recovery-codes-repository
 
 export class AuthService {
 
-    usersRepository: UsersRepository;
-    emailConfirmationRepository: EmailconfirmationRepository;
-    recoveryCodesRepository: RecoveryCodesRepository;
-    emailService: EmailService;
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.emailConfirmationRepository = new EmailconfirmationRepository()
-        this.recoveryCodesRepository = new RecoveryCodesRepository()
-        this.emailService = new EmailService()
+
+    constructor(
+        protected usersRepository: UsersRepository,
+        protected emailConfirmationRepository: EmailconfirmationRepository,
+        protected recoveryCodesRepository: RecoveryCodesRepository,
+        protected emailService: EmailService
+    ) {
     }
 
     async createUser(login: string, password: string, email: string) {

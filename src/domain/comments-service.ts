@@ -6,11 +6,10 @@ import {v4} from "uuid";
 
 export class CommentsService {
 
-    usersRepository: UsersRepository;
-    commentsRepository: CommentsRepository;
-    constructor() {
-        this.usersRepository = new UsersRepository()
-        this.commentsRepository = new CommentsRepository()
+    constructor(
+        protected usersRepository: UsersRepository,
+        protected commentsRepository: CommentsRepository
+    ) {
     }
 
     async create(

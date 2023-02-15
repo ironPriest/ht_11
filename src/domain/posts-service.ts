@@ -6,11 +6,11 @@ import {BlogsRepository} from "../repositories/blogs-repository";
 
 export class PostsService {
 
-    blogsRepository: BlogsRepository
-    postsRepository: PostsRepository
-    constructor() {
-        this.blogsRepository = new BlogsRepository()
-        this.postsRepository = new PostsRepository()
+
+    constructor(
+        protected blogsRepository: BlogsRepository,
+        protected postsRepository: PostsRepository
+    ) {
     }
 
     async getPosts(

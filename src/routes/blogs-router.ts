@@ -28,7 +28,7 @@ const youtubeUrlValidation = body('websiteUrl')
 
 const bloggerIdValidation = param('blogId').custom(async (blogId, ) => {
 
-    //todo how it's better to deal with blogService instance
+    //todo how it's better to deal with blogService instance (blogsRouter)
     let blogsRepository = new BlogsRepository();
     let blogsService = new BlogsService(blogsRepository)
 

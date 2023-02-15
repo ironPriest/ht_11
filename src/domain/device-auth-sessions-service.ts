@@ -6,9 +6,9 @@ import {DeviceAuthSessionsRepository} from "../repositories/device-auth-sessions
 
 export class DeviceAuthSessionsService {
 
-    private deviceAuthSessionsRepository: DeviceAuthSessionsRepository;
-    constructor() {
-        this.deviceAuthSessionsRepository = new DeviceAuthSessionsRepository()
+    constructor(
+        protected deviceAuthSessionsRepository: DeviceAuthSessionsRepository
+    ) {
     }
 
     async create(ip: string, title: string, userId: ObjectId) {

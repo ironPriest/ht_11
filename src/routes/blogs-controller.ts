@@ -4,10 +4,10 @@ import {Request, Response} from "express";
 
 export class BlogsController {
 
-    private postsService: PostsService
-
-    constructor(protected blogsService: BlogsService) {
-        this.postsService = new PostsService()
+    constructor(
+        protected blogsService: BlogsService,
+        protected postsService: PostsService
+    ) {
     }
 
     async getBlogs(req: Request, res: Response) {

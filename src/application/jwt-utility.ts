@@ -6,9 +6,9 @@ import {BlacktokensRepository} from "../repositories/blacktockens-repository";
 
 export class JwtUtility {
 
-    blackTokensRepository: BlacktokensRepository;
-    constructor() {
-        this.blackTokensRepository = new BlacktokensRepository()
+    constructor(
+        protected blackTokensRepository: BlacktokensRepository
+    ) {
     }
 
     async createJWT(user: UserType) {

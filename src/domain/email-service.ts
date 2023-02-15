@@ -2,9 +2,9 @@ import {EmailManager} from "../managers/email-manager";
 
 export class EmailService {
 
-    emailManager: EmailManager;
-    constructor() {
-        this.emailManager = new EmailManager()
+    constructor(
+        protected emailManager: EmailManager
+    ) {
     }
 
     async register(email: string, subject: string, code: string) {

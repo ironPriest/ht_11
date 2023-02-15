@@ -4,9 +4,9 @@ import {LikeStatusesRepository} from "../repositories/like-statuses-repository";
 
 export class LikeStatusesService {
 
-    likeStatusesRepository: LikeStatusesRepository;
-    constructor() {
-        this.likeStatusesRepository = new LikeStatusesRepository()
+    constructor(
+        protected likeStatusesRepository: LikeStatusesRepository
+    ) {
     }
 
     async create(userId: string, commentId: string, likeStatus: string): Promise<boolean> {
